@@ -10,16 +10,7 @@ psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,
          23,1, 23,2, 23,3, 23,4, 30,1, 30,2)
 dim(psq) <- c(2,42)
 
-# functions used later:
-hline <- function(y, col='black', lwd=1, lty=2) {
-  abline(h=y, col=col, lwd=lwd, lty=lty)
-}
 
-formatTime <- function (time) {
-  t <- as.POSIXlt (time)
-  tt <- sprintf ("%d:%02d:%02d", t$hour, t$min, t$sec)
-  return (tt)
-}
 
 testPlot <- function (k) {
   return(k %in% nplots || nplots == 0)
@@ -85,6 +76,16 @@ ui <- fluidPage (
 
 server <- function (input, output, session) {
   
+  # functions used later:
+  hline <<- function(y, col='black', lwd=1, lty=2) {
+    abline(h=y, col=col, lwd=lwd, lty=lty)
+  }
+  
+  formatTime <- function (time) {
+    t <- as.POSIXlt (time)
+    tt <- sprintf ("%d:%02d:%02d", t$hour, t$min, t$sec)
+    return (tt)
+  }
   observe({
     vp <- switch (input$Rplot,
       'track' = 1,
@@ -106,7 +107,7 @@ server <- function (input, output, session) {
   
   data <- reactive({
     Project <<- input$Project
-    source ('~/RStudio/Reprocessing/Configuration.R')
+    source ('Configuration.R')
     VarList <- vector()
     for (i in 1:length(VRPlot)) {
       for (j in 1:length (VRPlot[[i]])) {
