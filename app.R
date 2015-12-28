@@ -60,6 +60,7 @@ ui <- fluidPage (
   sidebarLayout (sidebarPanel(width=2, 
                               textOutput ('M1'),
                               selectInput ('Rplot', label='plot class',
+                                           selectize=FALSE, size=13,
                                            choices=c('track','temperature','humidity',
                                                      'pressure',
                                                      'wind',
