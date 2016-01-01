@@ -1,8 +1,8 @@
 ### Plot 17: all-flight Skew-T
 RPlot17 <- function (data, Flight=NA, ...) {
-  ## needs PSFC, ATX, DPXC
+  ## needs PSXC, ATX, DPXC
   op <- par (mfrow=c(1,1), mar=c(5,5,2,2)+0.1,oma=c(1.1,0,0,0))
-  DF <- data[, c("PSFC", "ATX", "DPXC")]
+  DF <- data[, c("PSXC", "ATX", "DPXC")]
   colnames(DF) <- c("Pressure", "Temperature", "DewPoint")
   print(SkewTSounding (DF, AverageInterval=5, BackgroundSpecs="skewTDiagram.Rdata")
         +ggtitle(sprintf("Flight %s, whole-flight-average", Flight)))

@@ -35,14 +35,14 @@ if (Project == "DC3") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  #  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "EW_VXL", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -77,10 +77,10 @@ if (Project == "DC3") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -114,14 +114,14 @@ if (Project == "TREX") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC")           
   ## list of vapor pressures to plot 
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -157,10 +157,10 @@ if (Project == "TREX") {
   # VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   VRPlot$PV16 <- c("PLWCC", "PLWC")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -179,8 +179,7 @@ if (Project == "TREX") {
   VRPlot$PV30 <- c(NA)
 }
 
-
-if (Project == "START08") {
+if (Project == "PACDEX") {
   pitch_offset = 0.178
   roll_offset = -0.192
   thdg_offset = -0.536
@@ -191,23 +190,23 @@ if (Project == "START08") {
   ## (PALT and PSXC are included to check the pressure altitude calculation)
   VRPlot <- list(PV1=c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC"))
   ## RPlot2: uses same variables as RPlot1
-  VRPlot[[2]] <- VRPlot[[1]]
+  VRPlot$PV2 <- VRPlot$PV1
   ## RPlot3: T vs time, specify any number of temperatures 
   VRPlot$PV3 <- c("ATH1", "ATH2", "ATF1", "AT_A")
   ## RPlot4: compare temperatures in pairs; specify up to five.
   ## first is reference for comparisons
   VRPlot$PV4 <- VRPlot$PV3
   ## the next line should end with ATX and list dewpoints
-  VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC")           
   ## list of vapor pressures to plot 
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -242,10 +241,91 @@ if (Project == "START08") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
+  ## additions for checking calculations:
+  VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
+  ## plot sample of CDP size distributions
+  VRPlot$PV20 <- c("CCDP_", "TASX")
+  ## radiometers not present in START08
+  VRPlot$PV21 <- c(NA)
+  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
+  ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
+  #VRPlot$PV22 <- c("CUHSAS_LMO", "CS200_", "TASX")
+  VRPlot$PV22 <- c(NA)
+  ## plot sample of 2DC size distributions 
+  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV30 <- c(NA)
+}
+
+if (Project == "START08") {
+  pitch_offset = 0.178
+  roll_offset = -0.192
+  thdg_offset = -0.536
+  pitch_offset = 0.41
+  roll_offset = -0.27
+  thdg_offset = -0.12  ## -0.32
+  ## track plot: don't change any exc. GGALT
+  ## (PALT and PSXC are included to check the pressure altitude calculation)
+  VRPlot <- list(PV1=c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC"))
+  ## RPlot2: uses same variables as RPlot1
+  VRPlot[[2]] <- VRPlot[[1]]
+  ## RPlot3: T vs time, specify any number of temperatures 
+  VRPlot$PV3 <- c("ATH1", "ATH2", "ATF1", "AT_A")
+  ## RPlot4: compare temperatures in pairs; specify up to five.
+  ## first is reference for comparisons
+  VRPlot$PV4 <- VRPlot$PV3
+  ## the next line should end with ATX and list dewpoints
+  VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
+  ## don't use if CAVP not available:
+  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
+  ## use only if CAVP not available: will plot surrogate CAVP
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
+  ## list of vapor pressures to plot 
+  ## then list "MR" (will calculate mixing ratios corresponding to EW)
+  VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR")  # H2OMR_GMD not in HIPPO-3 files?
+  ## pressure measurements, first is reference
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
+  ## dynamic pressure measurements, uncorrected, first is reference
+  VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
+  ## dynamic pressure measurements, corrected, first is reference
+  VRPlot$PV7 <- c(VRPlot$PV7, "QCFC", "QCRC", "QC_A") #plot 7a-bottom
+  ## list TAS measurements to plot vs time
+  VRPlot$PV7 <- c(VRPlot$PV7, "TASF", "TASR", "TASDRY", "TAS_A")    #plot 7b-top
+  ## and Mach numbers
+  VRPlot$PV7 <- c(VRPlot$PV7, "MACHF", "MACHR", "MACH_A") #plot 7b-bottom
+  ## plot 8 is total pressure, sum of 1+2 and 3+4; expect agreement
+  VRPlot$PV8 <- c("PSF", "QCF", "PS_A", "QC_A")
+  ## wind direction, speed, vertical wind: keep these unchanged
+  VRPlot$PV9 <- c("WDC", "IWD", "WSC", "IWS", "WIC", "ADIFR")  # need ADIFR for WIX
+  ## IRU velocity errors from differences (Schuler oscillation); don't change
+  VRPlot$PV10 <- c("GGVEW", "VEW", "GGVNS", "VNS", "GGQUAL")
+  ## for plotting effect of complementary filter
+  VRPlot$PV10 <- c(VRPlot$PV10, "VEWC", "VNSC")
+  ## compare calculated AOA/SS vs measured to check sensitivity coefficients
+  ## 3rd variable is aircraft vertical speed, preferable is GGVSPD, not in HIPPO-2
+  VRPlot$PV11 <- c("AKRD", "PITCH", "VSPD_A", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS") 
+  ## compare IRU attitude angles, IRS1 and IRS2
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
+  ## compare IRU measurements of acceleration, vertical speed, altitude
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
+  ## at present there is no RPlot14; UHSAS is handled later
+  VRPlot$PV14 <- c(NA)
+  ## plot concentrations:
+  VRPlot$PV15 <- c("CONCN_WCN")  # top panel
+  VRPlot$PV15 <- c(VRPlot$PV15, "CONCD_", "CONC1DC_")   # 2nd panel
+  # VRPlot$PV15 <- c(VRPlot$PV15, "USHFLW_", "USMPFLW_", "UREF_LMO", "USCAT_LMO")  # 3rd panel
+  ## list mean diameters, liquid water, RICE
+  VRPlot$PV16 <- c("DBARD_", "DBAR1DC_", "PLWCD_", "PLWCC", "PLWC", "PLWC1DC_", "RICE")
+  ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
+  VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
+  ## plot variable for skew-T sounding (don't normally change)
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  ## time history and vertical profile of potential temperatures:
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -278,14 +358,14 @@ if (Project == "TORERO") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "EW_VXL", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -320,10 +400,10 @@ if (Project == "TORERO") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -352,14 +432,14 @@ if (Project == "HIPPO-1") {
   VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
   VRPlot$PV5 <- c(VRPlot$PV5, "CAVPE_DPL", "CAVPE_DPR")
   ## don't use if CAVP not available:
-  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSFC", "LSRINT_VXL") 
+  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR", "H2OMR_GMD")
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -394,10 +474,10 @@ if (Project == "HIPPO-1") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -427,14 +507,14 @@ if (Project == "HIPPO-2") {
   VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
   VRPlot$PV5 <- c(VRPlot$PV5, "CAVPE_DPL", "CAVPE_DPR")
 ## don't use if CAVP not available:
-  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSFC", "LSRINT_VXL") 
+  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSXC", "LSRINT_VXL") 
 ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
       ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
       ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR", "H2OMR_GMD")
       ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
       ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
       ## dynamic pressure measurements, corrected, first is reference
@@ -469,10 +549,10 @@ if (Project == "HIPPO-2") {
       ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
       ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
       ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
       ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
       ## plot sample of CDP size distributions
@@ -500,15 +580,15 @@ if (Project == "HIPPO-3") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSFC", "LSRINT_VXL") 
+  # VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR". "PSXC", "LSRINT_VXL") 
   VRPlot$PV5 <- c(VRPlot$PV5, "CAVPE_DPL", "CAVPE_DPR")
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -543,10 +623,10 @@ if (Project == "HIPPO-3") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -577,14 +657,14 @@ if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot (there is no EW_VXL in HIPPO-2)
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "EW_VXL", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -619,10 +699,10 @@ if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -656,14 +736,14 @@ if (Project == "PREDICT") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "LSRINT_VXL") 
+  # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot 
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "EW_VXL", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -698,10 +778,10 @@ if (Project == "PREDICT") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
@@ -733,14 +813,14 @@ if (Project == "DC3-TEST") {
   ## the next line should end with ATX and list dewpoints
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
-  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSFC", "QCFC", "LSRINT_VXL") 
+  VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "QCFC", "LSRINT_VXL") 
   ## use only if CAVP not available: will plot surrogate CAVP
-  # VRPlot$PV5 <- c(VRPlot$PV5, "PSFC", "QCFC", "LSRINT_VXL")           
+  # VRPlot$PV5 <- c(VRPlot$PV5, "PSXC", "QCFC", "LSRINT_VXL")           
   ## list of vapor pressures to plot 
   ## then list "MR" (will calculate mixing ratios corresponding to EW)
   VRPlot$PV5 <- c(VRPlot$PV5, "EW_DPL", "EW_DPR", "MR")  # H2OMR_GMD not in HIPPO-3 files?
   ## pressure measurements, first is reference
-  VRPlot$PV6 <- c("PSFC", "PS_A", "PSF")
+  VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   ## dynamic pressure measurements, uncorrected, first is reference
   VRPlot$PV7 <- c("QCF", "QCR")                       #plot 7a-top
   ## dynamic pressure measurements, corrected, first is reference
@@ -775,10 +855,10 @@ if (Project == "DC3-TEST") {
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
-  VRPlot$PV17 <- c("PSFC", "ATX", "DPXC")
-  VRPlot$PV18 <- c("PSFC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   ## time history and vertical profile of potential temperatures:
-  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSFC")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC")
   ## additions for checking calculations:
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions

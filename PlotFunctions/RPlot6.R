@@ -8,7 +8,7 @@ RPlot6 <- function (data, ...) {
   axis (4, at=c(500,600,700), labels=c("-2", "0", "2"), col='red', col.axis='red')
   abline (h=500, col='red', lty=2); abline (h=700, col='red', lty=2)
   # legend ("bottomleft", 
-  #         legend=c("(PSFC-PS_A)*50+600", "+/-2 hPa"),
+  #         legend=c("(PSXC-PS_A)*50+600", "+/-2 hPa"),
   #         lty=c(1,2), cex=0.75,
   #         col=c('red', 'red'))
   labl <- VRPlot[[6]]

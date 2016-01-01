@@ -1,7 +1,7 @@
 ### plot 18: plot skew-T for individual climbs and descents:
 RPlot18 <- function (data, ...) {
 ## need to add footer if/when reimplemented
-  ## needs PSFC, ATX, DPXC, GGALT
+  ## needs PSXC, ATX, DPXC, GGALT
   # search for soundings: 3 min climb/descent > tol
   del <- 180
   tol <- 3.5
@@ -30,7 +30,7 @@ RPlot18 <- function (data, ...) {
       #print (sprintf ("alt change: %.1f", DataT$GGALT[s[j]]-startAlt))
       AltChange <- DataT$GGALT[s[j]] - startAlt
       if (AltChange * lastAltChange < 0) {
-        DF <- DataT[s[startSounding:endSounding], c("PSFC", "ATX", "DPXC")]
+        DF <- DataT[s[startSounding:endSounding], c("PSXC", "ATX", "DPXC")]
         colnames(DF) <- c("Pressure", "Temperature", "DewPoint")
         print(SkewTSounding (DF, BackgroundSpecs="skewTDiagramC130.Rdata")
               +ggtitle(sprintf("Flight %s, Times %s--%s", Flight,
@@ -46,7 +46,7 @@ RPlot18 <- function (data, ...) {
   L <- length (s)
   #print (sprintf ("end at %d %d", L, s[L]))
   #print (sprintf (" alt change: %.1f", DataT$GGALT[L]-startAlt))
-  DF <- DataT[s[startSounding:endSounding], c("PSFC", "ATX", "DPXC")]
+  DF <- DataT[s[startSounding:endSounding], c("PSXC", "ATX", "DPXC")]
   colnames(DF) <- c("Pressure", "Temperature", "DewPoint")
   print(SkewTSounding (DF, BackgroundSpecs="skewTDiagramC130.Rdata")
         +ggtitle(sprintf("Flight %s, Times %s--%s", Flight,
@@ -54,7 +54,7 @@ RPlot18 <- function (data, ...) {
                          formatTime(DataT$Time[s[endSounding]]))))
   startSounding <- endSounding + 1
   endSounding <- length(s)
-  DF <- DataT[s[startSounding:endSounding], c("PSFC", "ATX", "DPXC")]
+  DF <- DataT[s[startSounding:endSounding], c("PSXC", "ATX", "DPXC")]
   colnames(DF) <- c("Pressure", "Temperature", "DewPoint")
   print(SkewTSounding (DF, BackgroundSpecs="skewTDiagramC130.Rdata")
         +ggtitle(sprintf("Flight %s, Times %s--%s", Flight,

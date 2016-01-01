@@ -8,7 +8,7 @@ RPlot13 <- function (data, ...) {
   plotWAC (DF, ylab="ACINS")
   title (sprintf ("mean vertical acceleration: %.3f", mean (data[, VRPlot[[13]][1]], na.rm=TRUE)))
   VSPD <- VRPlot[[13]]
-VSPD <- VSPD[grep("VSPD", VSPD)]
+  VSPD <- VSPD[grep("VSPD", VSPD)]
   plotWAC (data[, c("Time", VSPD)], legend.position='topright')
   title (sprintf ("mean vertical velocity: %.3f (IRS) and %.3f (GPS)",
                   mean (data$VSPD, na.rm=TRUE), mean (data$VSPD_A, na.rm=TRUE)))
