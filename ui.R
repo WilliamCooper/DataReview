@@ -11,10 +11,10 @@ ui <- fluidPage (
                    choices=c('PACDEX', 'DC3', 'ORCAS', 'START08','CONTRAST', 'MPEX'), width='100px'),
                    actionButton ('reconfigure', 'save config'))
       ),
-    column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=10, min=1, max=50, 
-              step=1, width='70px'))),
-    column (2, wellPanel (numericInput (inputId='plot', label='plot', value=1, min=1, max=42, 
-               step=1, width='70px'))),
+    column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=10, 
+                                        min=1, max=50, step=1, width='70px'))),
+    column (2, wellPanel (numericInput (inputId='plot', label='plot', value=1, 
+                                        min=1, max=49, step=1, width='70px'))),
     column(4, wellPanel(
       # This outputs the dynamic UI component
       uiOutput("ui"))),
@@ -28,11 +28,11 @@ ui <- fluidPage (
                                            choices=c('track','temperature','humidity',
                                                      'pressure',
                                                      'wind',
+                                                     'radiation',
                                                      'particles',
                                                      'skew-T',
                                                      'potential T',
                                                      'CDP',
-                                                     'radiation',
                                                      'UHSAS/PCASP',
                                                      '2DC', 
                                                      'air chemistry')),

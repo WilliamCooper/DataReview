@@ -66,7 +66,7 @@ if (Project == "DC3") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
+  ## now radiation
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCN", "CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -86,12 +86,11 @@ if (Project == "DC3") {
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
   ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
-  VRPlot$PV30 <- c("CORAW_AL", "CO2_PIC")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c("CORAW_AL", "CO2_PIC")
 }
 
 if (Project == "TREX") {
@@ -145,7 +144,7 @@ if (Project == "TREX") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
+  ## radiometers not present in START08
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCN_WCN")  # top panel
@@ -166,17 +165,12 @@ if (Project == "TREX") {
   ## plot sample of CDP size distributions
   # VRPlot$PV20 <- c("CCDP_", "TASX")
   VRPlot$PV20 <- c(NA)
-  ## radiometers not present in START08
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  #VRPlot$PV22 <- c("CUHSAS_LMO", "CS200_", "TASX")
-  VRPlot$PV22 <- c(NA)
+  VRPlot$PV21 <- c(NA)
   ## plot sample of 2DC size distributions 
-  # VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c(NA)
+  # VRPlot$PV23 <- c("CORAW_AL")
   VRPlot$PV23 <- c(NA)
-  # VRPlot$PV30 <- c("CORAW_AL")
-  VRPlot$PV30 <- c(NA)
 }
 
 if (Project == "PACDEX") {
@@ -230,7 +224,6 @@ if (Project == "PACDEX") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCN_WCN")  # top panel
@@ -249,15 +242,10 @@ if (Project == "PACDEX") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in START08
   VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
-  ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  #VRPlot$PV22 <- c("CUHSAS_LMO", "CS200_", "TASX")
-  VRPlot$PV22 <- c(NA)
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
-  VRPlot$PV30 <- c(NA)
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c(NA)
 }
 
 if (Project == "START08") {
@@ -311,7 +299,7 @@ if (Project == "START08") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
+  ## radiometers not present in START08
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCN_WCN")  # top panel
@@ -330,15 +318,12 @@ if (Project == "START08") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in START08
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  #VRPlot$PV22 <- c("CUHSAS_LMO", "CS200_", "TASX")
-  VRPlot$PV22 <- c(NA)
+  #VRPlot$PV21 <- c("CUHSAS_LMO", "CS200_", "TASX")
+  VRPlot$PV21 <- c(NA)
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
-  VRPlot$PV30 <- c("CORAW_AL")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c("CORAW_AL")
 }
 
 if (Project == "TORERO") {
@@ -390,7 +375,7 @@ if (Project == "TORERO") {
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
   ## at present there is no RPlot14; UHSAS is handled later
-  VRPlot$PV14 <- c(NA)
+  VRPlot$PV14 <- c("RSTB")
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCN", "CONCU_", "CONCU100_", "CONCU500_")  # top panel
   VRPlot$PV15 <- c(VRPlot$PV15, "CONCD_", "CONC1DC_")   # 2nd panel
@@ -408,14 +393,11 @@ if (Project == "TORERO") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  VRPlot$PV21 <- c("RSTB")
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
-  VRPlot$PV30 <- c("CORAW_AL", "CO2_PIC")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c("CORAW_AL", "CO2_PIC")
 }
 if (Project == "HIPPO-1") {
   ## track plot: don't change any exc. GGALT
@@ -463,7 +445,7 @@ if (Project == "HIPPO-1") {
   VRPlot$PV12 <- c("PITCH", "ROLL", "THDG")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
+  ## radiometers not present
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -482,11 +464,10 @@ if (Project == "HIPPO-1") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
+  VRPlot$PV22 <- c(NA)
+  VRPlot$PV23 <- c(NA)
   ## plot sample of 2DC size distributions 
   ##VRPlot$PV23 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
@@ -538,7 +519,6 @@ if (Project == "HIPPO-2") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
       ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-      ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
       ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -557,13 +537,11 @@ if (Project == "HIPPO-2") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
       ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-      ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
       ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
       ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c(NA)
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
 }
 if (Project == "HIPPO-3") {
@@ -612,7 +590,6 @@ if (Project == "HIPPO-3") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -631,14 +608,12 @@ if (Project == "HIPPO-3") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
+  VRPlot$PV23 <- c(NA)
 }
 if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   pitch_offset = 0.178
@@ -688,7 +663,6 @@ if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -707,14 +681,12 @@ if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
+  VRPlot$PV23 <- c(NA)
 }
 if (Project == "PREDICT") {
   pitch_offset = 0.178
@@ -767,7 +739,6 @@ if (Project == "PREDICT") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2",  "THDG", "THDG_IRS2")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_LMO", "CONCU100_LMO", "CONCU500_LMO", "CONCP_", "CONCN_WCN")  # top panel
@@ -786,14 +757,12 @@ if (Project == "PREDICT") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_LMO", "CS200_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_LMO", "CS200_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
+  VRPlot$PV23 <- c(NA)
 }
 
 if (Project == "DC3-TEST") {
@@ -844,7 +813,6 @@ if (Project == "DC3-TEST") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS3", "ROLL", "ROLL_IRS3",  "THDG", "THDG_IRS3")
   ## compare IRU measurements of acceleration, vertical speed, altitude
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS3", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  ## at present there is no RPlot14; UHSAS is handled later
   VRPlot$PV14 <- c(NA)
   ## plot concentrations:
   VRPlot$PV15 <- c("CONCU_", "CONCU100_", "CONCU500_")  # top panel
@@ -863,12 +831,10 @@ if (Project == "DC3-TEST") {
   VRPlot$PV19 <- c(VRPlot$PV19, "ATX", "PSXC", "EWX")
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  ## radiometers not present in HIPPO-2
-  VRPlot$PV21 <- c(NA)
-  # VRPlot$PV21 <- c("RSTB", "IRBC", "IRTC"))
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
   VRPlot$PV22 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions 
-  VRPlot$PV23 <- c("C1DC_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
+  VRPlot$PV23 <- c(NA)
 }

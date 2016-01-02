@@ -1,47 +1,31 @@
-### plot 23: 2DC size distributions
-RPlot23 <- function (data, ...) {
-  ## needs C1DC_LWOI; references fname from calling environment
-  kount = 0
-  netCDFfile = nc_open(fname)
-  namesCDF <- names (netCDFfile$var)
-  nm1 <- namesCDF[grepl("C1DC_", namesCDF)][1]
-  C1DC <- ncvar_get (netCDFfile, nm1)
-  Time <- ncvar_get (netCDFfile, "Time")
-  TASX <- ncvar_get (netCDFfile, "TASX")
-  time_units <- ncatt_get (netCDFfile, "Time", "units")
-  tref <- sub ('seconds since ', '', time_units$value)
-  Time <- as.POSIXct(as.POSIXct(tref, tz='UTC')+Time, tz='UTC')
-  CellSizes <- ncatt_get (netCDFfile, nm1, "CellSizes")
-  CellLimits <- CellSizes$value
-  layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(5,5,6))
-  ## yes, I know, bad-practice-reference to calling environment for StartTime
-  ifelse (StartTime > 0, jstart <- getIndex(Time, StartTime), jstart <- 1)
-  # print (sprintf ("start time in RPlot23 is %d and jstart is %d\n",
-  #                 StartTime, jstart))
-  op <- par (mar=c(2,2,1,1)+0.1,oma=c(1.1,0,0,0))
-  for (j in jstart:length(Time)) {
-    if (is.na(Time[j])) {next}
-    if (!is.na(TASX[j]) && (TASX[j] < 130)) {next}
-    if (kount >= 24) {break}
-    S1DC <- C1DC[,j]
-    ## convert distributions to number per L per um
-    for (m in 2:length(S1DC)) {
-      S1DC[m] <- S1DC[m] / (CellLimits[m] - CellLimits[m-1])
-    }
-    S1DC[S1DC <= 0] <- 1e-4
-    if ((any(S1DC > 0.1, na.rm=TRUE))) {
-      kount <- kount + 1
-      ifelse ((kount %% 3), op <- par (mar=c(2,2,1,1)+0.1),
-              op <- par (mar=c(5.2,2,1,1)+0.1))
-      plot (CellLimits, S1DC, type='s', ylim=c(1.e-2,1.e2), 
-            xlab="Diameter [um]", log="y", col='blue', lwd=2)
-      title(sprintf("Time=%s", strftime (Time[j], format="%H:%M:%S", tz='UTC')), 
-            cex.main=.75)
-      legend ("topright", legend=c("1DC"), col='blue', 
-              lwd=c(2,1), cex=0.75) 
-      if (kount%%6==0)   AddFooter ()
-    }
+### plot 23: chemistry (CO, O3)
+
+RPlot23 <- function (data, Seq=NA) { 
+  ## needs COFLOW_AL, CORAW_AL, INLETP_AL, FO3_ACD, CO2_PIC
+  op <- par (mfrow=c(2,1), mar=c(5,5,2,2)+0.1,oma=c(1.1,0,0,0))
+  ## beware of all-missing case:
+  if (!any(!is.na(data$CORAW_AL))) {return ()}
+
+  # plot CORAW
+  if ("CORAW_AL" %in% names(data)) {data$CORAW_AL <- 0.002*data$CORAW_AL}
+  plotWAC (data[, c("Time", VRPlot$PV23)],
+         ylab="ppmv",
+         lty=c(1,1), lwd=c(2), legend.position='bottomright',
+         col='red')
+  title("CORAW", cex.main=0.8)
+  if ("FO3_ACD" %in% names (data)) {
+    plotWAC (data[, c("Time", "FO3_ACD")], ylab="FO3 [ppbv]")
   }
-  Z <- nc_close (netCDFfile)
+  AddFooter ()
+  if (!is.na(Seq) && (Seq == 1)) {return()}
+  # plot COFLOW and INLETP
+  if (("COFLOW_AL" %in% names (data)) && any(!is.na(data$COFLOW_AL))) {
+    plotWAC(data[, c("Time", "COFLOW_AL")])
+  }
+  if ("INLETP_AL" %in% names (data)) {
+    plotWAC(data[, c("Time","INLETP_AL")])
+  }
+  #legend('bottomright', legend=c("COFLOW", "INLETP"), pch=20, col=c('red', 'blue'))
+  AddFooter ()
 }
 

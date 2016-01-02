@@ -30,14 +30,14 @@ server <- function (input, output, session) {
                   'humidity' = 5,
                   'pressure' = 9,
                   'wind' = 13,
-                  'particles' = 20,
-                  'skew-T' = 25,
-                  'potential T' = 26,
-                  'CDP' = 28,
-                  'radiation' = 32, 
+                  'radiation' = 20,
+                  'particles' = 21,
+                  'skew-T' = 26,
+                  'potential T' = 28,
+                  'CDP' = 29,
                   'UHSAS/PCASP' = 33,
                   '2DC' = 37,
-                  'air chemistry' = 41
+                  'air chemistry' = 49
     )
     updateNumericInput (session, 'plot', value=vp)
   })
@@ -89,16 +89,15 @@ server <- function (input, output, session) {
             'AKRD/SSRD',
             'IRU comparison',
             'more IRU',
-            'plot not available',
+            'radiation',
             'concentrations',
             'dbar/lwc/housek.',
             'skew-T diagram',
             'plot not available',
             'potential T',
             'CDP',
-            'radiation',
             'UHSAS/PCASP',
-            '2DC (1D sizes)', ' ', ' ', ' ', ' ', ' ', ' ',
+            '2DC (1D sizes)', 
             'air chemistry'
     )
   })
