@@ -20,7 +20,7 @@ ui <- fluidPage (
       uiOutput("ui"))),
     column(2, wellPanel (actionButton (inputId='savePDF', 'save PDF'),
                          selectInput ('addVar', label=NULL, 
-                                      choices=c('add var',FI$Variables))))),
+                                      choices=c('add var',sort(FI$Variables)))))),
 
   sidebarLayout (sidebarPanel(width=2, 
                               textOutput ('M1'),
