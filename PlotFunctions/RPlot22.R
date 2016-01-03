@@ -1,7 +1,7 @@
 ### plot 22: 2DC size distributions
 RPlot22 <- function (data, Seq=NA) {
   ## needs C1DC_LWOI; references fname from calling environment
-  if (length (VRPlot$PV22) < 1) {return()}
+  if (is.na (VRPlot$PV22) || (length(VRPlot$PV22) < 1)) {return ()}
   kount = 0
   if (length(netCDFfile) <= 1) {netCDFfile <- nc_open (fname)}
   namesCDF <- names (netCDFfile$var)
@@ -31,7 +31,7 @@ RPlot22 <- function (data, Seq=NA) {
     S1DC[S1DC <= 0] <- 1e-4
     if ((any(S1DC > 0.1, na.rm=TRUE))) {
       kount <- kount + 1
-      if (!is.na(Seq) && (kount > (Seq-1)*6)) {
+      if (is.na (Seq) || (!is.na(Seq) && (kount > (Seq-1)*6))) {
         ifelse ((kount %% 3), op <- par (mar=c(2,2,1,1)+0.1),
                 op <- par (mar=c(5.2,2,1,1)+0.1))
         plot (CellLimits, S1DC, type='s', ylim=c(1.e-2,1.e2), 

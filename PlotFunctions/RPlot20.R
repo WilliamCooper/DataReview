@@ -1,5 +1,6 @@
 ### plot 20: CDP/SP100 size distributions
 RPlot20 <- function (data, Seq=NA) {
+  if (is.na (VRPlot$PV20) || (length(VRPlot$PV20) < 1)) {return ()}
   ## needs CCDP_LWOI; references fname from calling environment
   kount = 0
   if (length(netCDFfile) <= 1) {netCDFfile <- nc_open (fname)}
@@ -43,7 +44,7 @@ RPlot20 <- function (data, Seq=NA) {
       CDP[CDP <= 0] <- 1e-4
       if ((any(CDP > 1, na.rm=TRUE))) {
         kount <- kount + 1
-        if (!is.na(Seq) && (kount > (Seq-1)*6)) {
+        if (is.na (Seq) || (!is.na(Seq) && (kount > (Seq-1)*6))) {
           ifelse ((kount %% 3), op <- par (mar=c(2,2,1,1)+0.1),
                   op <- par (mar=c(5.2,2,1,1)+0.1))
           plot (CellLimitsD, CDP, type='s', ylim=c(1.e-1,1.e3), 

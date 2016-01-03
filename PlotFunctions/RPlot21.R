@@ -1,7 +1,7 @@
 ### plot 21: UHSAS size distributions
 RPlot21 <- function (data, Seq=NA) {
   ## needs CUHSAS_RWOOU, CPCASP_RWOOP; references fname from calling environment
-  if (length (VRPlot$PV21) < 1) {return()}
+  if (length (is.na(VRPlot$PV21) || (VRPlot$PV21) < 1)) {return()}
   kount = 0
   if (length(netCDFfile) <= 1) {netCDFfile <- nc_open (fname)}
   plotTest <- 50
@@ -62,7 +62,7 @@ RPlot21 <- function (data, Seq=NA) {
     if (AddPCASP) {PCASP[PCASP <= 0] <- 1e-4}
     if ((any(UHSAS > plotTest, na.rm=TRUE)) || (AddPCASP && any(PCASP > plotTest, na.rm=TRUE)) ) {
       kount <- kount + 1
-      if (!is.na(Seq) && (kount > (Seq-1)*6)) {
+      if (is.na (Seq) || (!is.na(Seq) && (kount > (Seq-1)*6))) {
         ifelse ((kount %% 3), op <- par (mar=c(2,2,1,1)+0.1),
                 op <- par (mar=c(5.2,2,1,1)+0.1))
         plot (CellLimitsU, UHSAS, type='s', ylim=c(1,1.e6), 

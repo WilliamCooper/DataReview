@@ -2,7 +2,7 @@ library(shiny)
 library(Ranadu)
 
 
-nplots <- c(1, 3:17, 19:23)    # project default
+nplots <- c(1, 3:17, 19:25)    # project default
 psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
          8,1, 9,1, 9,2, 10,1, 10,2, 11,1, 12,1, 13,1, 14,1, 15,1, 15,2, #22
          16,1, 16,2, 16,3, 17,1, 19,1, 19,2, #28
@@ -52,7 +52,58 @@ formatTime <- function (time) {
 
 saveConfig <- function() {
   print ('entered saveConfig')
+  file.copy('Configuration.R','Configuration.R.backup', overwrite=TRUE)
+  lines <- readLines ('Configuration.R')
+  unlink ('Configuration.R')
+  startLine <- which (grepl (sprintf ('%s', Project), lines))
+  endLine <- which (grepl ('Project', lines[(startLine+1):length(lines)]))[1]
+  if (is.na(endLine)) {
+    endLine <- length (lines)
+  } else {
+    endLine <- endLine + startLine - 1
+  }
+  linesOut <- lines[1:startLine]
+  while (grepl ('offset',lines[startLine+1])) {
+    startLine <- startLine + 1
+    linesOut <- c(linesOut, lines[startLine])
+  }
+  v <- VRPlot$PV1
+  linesOut <- c(linesOut, paste('  VRPlot <- list(PV1 = ',list(v), ')', sep=''))
+  for (i in 2:length(VRPlot)) {
+    v <- as.character(VRPlot[[i]])
+    linesOut <- c(linesOut, paste(sprintf ('  VRPlot$PV%d <- ',i),list(v),sep=''))
+  }
+  linesOut <- c(linesOut, '}\n ')
+  linesOut <- c(linesOut, lines[endLine:(length(lines))])
+  writeLines(linesOut, 'Configuration.R')
+  print (sprintf ('saved configuration for %s in Configuration.R', Project))
   print (str(VRPlot))
+}
+
+savePDF <- function(Data, inp) {
+  print ('entered savePDF')
+  plotfile = sprintf("%srf%02dPlots.pdf", inp$Project, inp$Flight)
+  unlink (plotfile)
+  cairo_pdf (filename = plotfile, onefile=TRUE)
+  ## enable something like the next to get individual png files instead of one large pdf
+  #### png (file = sprintf ("./Figures/WINTER%s-%%02d.png", Flight))
+  print (sprintf ("saving plots to file %s", plotfile))
+  DataV <- limitData (Data, inp)
+  t1 <- inp$times[1]
+  t <- as.POSIXlt (t1)
+  StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
+  DataV <- DataV[(DataV$Time > inp$times[1]) & (DataV$Time < inp$times[2]), ]
+  for (np in 1:30) {
+    if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
+      if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {
+        print(paste('Plot',np))
+        ## eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
+        eval(parse(text=sprintf("RPlot%d(DataV)", np)))
+      }
+    }
+  }
+  dev.off()
+  print ('finished savePDF')
 }
 
 ## get VRPlot and chp/shp:
@@ -63,9 +114,12 @@ loadVRPlot <- function (Project, psq) {
   # print (str(VRPlot))
   ## this leaves VRPlot defined
   if (length(VRPlot) < 30) {
+    nm <- names (VRPlot)
     for (i in (length(VRPlot)+1):30) {
-      VRPlot[i] <- list ('TASX')
+      VRPlot[[i]] <- c('TASX', 'ATX')
+      nm[i] <- sprintf ('PV%d', i)
     }
+    names(VRPlot) <- nm
   }
   FI <- DataFileInfo (sprintf ('%s%s/%srf05.nc', DataDirectory (), Project, Project))
   LAT <- FI$Variables[grepl ('^LAT', FI$Variables)]
@@ -121,9 +175,9 @@ loadVRPlot <- function (Project, psq) {
   chp[[1]] <- c(LAT,LON,WD,WS)
   chp[[2]] <- c(ALT,'PSXC')
   chp[[3]] <- AT
-  chp[[4]] <- AT
+  chp[[4]] <- c(AT,'ATX')
   chp[[5]] <- c(DP,'ATX')
-  chp[[6]] <- DP
+  chp[[6]] <- c(DP,'DPXC')
   chp[[7]] <- CAVP
   chp[[8]] <- c(EWW,'EWX')
   chp[[9]] <- PS
@@ -163,13 +217,13 @@ loadVRPlot <- function (Project, psq) {
   chp[[40]] <- chp[[37]]
   chp[[41]] <- CHEM
   chp[[42]] <- CHEM
-  chp[[43]] <- 'TASX'
-  chp[[44]] <- 'TASX'
-  chp[[45]] <- 'TASX'
-  chp[[46]] <- 'TASX'
-  chp[[47]] <- 'TASX'
-  chp[[48]] <- 'TASX'
-  chp[[49]] <- 'TASX'
+  chp[[43]] <- c('TASX', 'ATX')
+  chp[[44]] <- c('TASX', 'ATX')
+  chp[[45]] <- c('TASX', 'ATX')
+  chp[[46]] <- c('TASX', 'ATX')
+  chp[[47]] <- c('TASX', 'ATX')
+  chp[[48]] <- c('TASX', 'ATX')
+  chp[[49]] <- c('TASX', 'ATX')
   chp <<- chp
   for (i in c(1:20,26:28,41:49)) {
     j <- psq[1, i]
@@ -187,6 +241,21 @@ loadVRPlot <- function (Project, psq) {
   slp <<- slp
   return (VRPlot)
 }
+
+FI <- DataFileInfo (sprintf ('%s%s/%srf05.nc', DataDirectory (), Project, Project))
+
+limitData <- function (Data, input) {
+  DataV <- Data
+  namesV <- names(DataV)
+  namesV <- namesV[namesV != "Time"]
+  if (input$limits) {
+    t <- !is.na (DataV$TASX) & (DataV$TASX < 110)
+    t <- t | (abs(DataV$ROLL) > 5)
+    DataV[t, namesV] <- NA
+  }
+  return (DataV)
+}
+
 makeVRPlot <- function (slp, psq) {
   VR <- list(PV1=c(slp[[1]], slp[[2]]))
   VR$PV2 <- VR$PV1
