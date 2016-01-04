@@ -81,7 +81,9 @@ server <- function (input, output, session) {
   observeEvent (input$reconfigure, saveConfig (), handler.env=.GlobalEnv)
   observeEvent (input$savePDF, 
                 savePDF (Data=data(), inp=input))
-##                handler.env=.GlobalEnv)
+##                handler.env=.GlobalEnv), 
+  observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
+  observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   
   VRP <- reactive ({
     if (Trace) {print ('entered VRP')}

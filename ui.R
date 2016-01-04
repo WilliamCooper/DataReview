@@ -39,7 +39,9 @@ ui <- fluidPage (
                                                      'air chemistry',
                                                      'extras')),
                               checkboxInput ('limits','apply restrictions'),
-                              uiOutput("ui2")),
+                              uiOutput("ui2"),
+                              actionButton ('ncplot', 'see in ncplot'),
+                              actionButton ('Xanadu', 'see in Xanadu')),
                  mainPanel( tabsetPanel (tabPanel ('plot', plotOutput (outputId='display')),
                                          tabPanel ('stats', dataTableOutput ('stats')),
                                          tabPanel ('listing', dataTableOutput ('listing')))))
