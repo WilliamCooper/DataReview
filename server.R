@@ -11,6 +11,7 @@ server <- function (input, output, session) {
       chp[[input$plot]] <<- c(chp[[input$plot]],input$addVar)
     }
     PVar <<- slp[[input$plot]]
+    updateSelectInput (session, 'addVar', selected='add var')
     selectInput ('PlotVar', label='variables', selectize=FALSE, multiple=TRUE,
                  choices=chp[[input$plot]], selected=slp[[input$plot]], size=10)
   })
