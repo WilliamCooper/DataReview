@@ -242,6 +242,7 @@ limitData <- function (Data, input) {
   if (input$limits) {
     t <- !is.na (DataV$TASX) & (DataV$TASX < 110)
     t <- t | (abs(DataV$ROLL) > 5)
+    t[is.na(t)] <- FALSE
     DataV[t, namesV] <- NA
   }
   return (DataV)

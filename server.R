@@ -41,6 +41,21 @@ server <- function (input, output, session) {
     VRPlot[[jp]] <<- PVar  
   })
   
+#   st <- c('track', 'track',
+#           'temperature', 'temperature',
+#           rep('humidity', 4),
+#           rep('pressure', 4),
+#           rep('wind', 7),
+#           'radiation',
+#           rep('particles', 5),
+#           'skew-T',
+#           rep('potential T',2),
+#           rep('CDP',4),
+#           rep('UHSAS/PCASP',4),
+#           rep('2DC', 4),
+#           rep('air chemistry',2),
+#           rep('extras',2))
+  
   observe({
     vp <- switch (input$Rplot,
                   'track' = 1,
@@ -124,7 +139,9 @@ server <- function (input, output, session) {
             'CDP',
             'UHSAS/PCASP',
             '2DC (1D sizes)', 
-            'air chemistry'
+            'air chemistry',
+            'extra2',
+            'extra'
     )
   })
   
@@ -197,6 +214,8 @@ server <- function (input, output, session) {
         eval(parse(text=sprintf("RPlot%d(Data, Seq=%d)", 
                                 psq[1, input$plot], psq[2, input$plot])))
       }
+#       si <- input$plot
+#       updateSelectInput (session, 'Rplot', selected=st[si])
       if (Trace) {print ('finished display')}
     }
   }, width=920, height=680)
