@@ -90,6 +90,7 @@ server <- function (input, output, session) {
         VarList <- c(VarList, VRPlot[[i]][j])
       }
     }
+    VarList <<- VarList  ## just saving for outside-app use
     ## these are needed for translation to new cal coefficients
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
     fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 

@@ -2,7 +2,7 @@
 # do 1-min smoothing; otherwise, too noisy
 RPlot16 <- function (data, Seq=NA) {
   if (is.na (Seq) || Seq == 1) {
-    if ("DBAR1DC_" %in% VRPlot[[16]]) {
+    if (any(grepl("DBAR1DC_", VRPlot[[16]]))) {
       layout(matrix(1:3, ncol = 1), widths = 1, heights = c(5,5,6))
     } else {
       layout(matrix(1:2, ncol = 1), widths = 1, heights = c(5,6))
@@ -13,11 +13,11 @@ RPlot16 <- function (data, Seq=NA) {
     va <- vector()
     for (c in DB) {
       nm <- names(data)[grepl(c, names(data))]
-      v <- sub("_", "", c)
+      v <- sub("_.*", "", c)
       data[, v] <- SmoothInterp(data[, nm])
       va <- c(va, v)
     }
-    if (!"DBAR1DC_" %in% VRPlot[[16]]) {
+    if (!(any(grepl("DBAR1DC_", VRPlot[[16]])))) {
       op <- par (mar=c(5,4,1,1)+0.1)
     }
     if (length (va) > 0) {
@@ -38,7 +38,7 @@ RPlot16 <- function (data, Seq=NA) {
     plotWAC(data[, c("Time", va)], ylim=c(0,30), ylab="DBAR", legend.position="topright")
     title ("1-min filter", cex.main=0.75) 
     op <- par (mar=c(5,4,1,1)+0.1)
-    if ("DBAR1DC_" %in% VRPlot[[16]]) {
+    if (any(grepl("DBAR1DC_", VRPlot[[16]]))) {
       nm <- names(data)[grepl("DBAR1DC_", names(data))]
       plotWAC(data[, c("Time", nm)])
     }
@@ -54,7 +54,7 @@ RPlot16 <- function (data, Seq=NA) {
     if ('RICE' %in% names (data)) {LW <- c(LW, "RICE")}
     va3 <- vector()
     for (c in LW) {
-      nm <- names(data)[grepl(c, names(data))]
+      nm <- names(data)[which(grepl(c, names(data)))]
       v <- sub("_.*", "", c)
       data[, v] <- SmoothInterp(data[, nm])
       va3 <- c(va3, v)
@@ -67,8 +67,8 @@ RPlot16 <- function (data, Seq=NA) {
       hline (10); hline (15)
     }
     op <- par (mar=c(5,4,1,1)+0.1)
-    if ("PLWC1DC" %in% VRPlot[[16]]) {
-      plotWAC(data[, c("Time", 'PLWC1DC')])
+    if (any(grepl("PLWC1DC", LW))) {
+      plotWAC(data[, c("Time", names(data)[which(grepl('PLWC1DC', names(data)))])])
     }
     AddFooter()
     if (!is.na(Seq) && (Seq == 2)) {return()}

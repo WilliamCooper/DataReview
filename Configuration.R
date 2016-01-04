@@ -179,7 +179,7 @@ if (Project == "PACDEX") {
   thdg_offset = -0.536
   pitch_offset = 0.41
   roll_offset = -0.27
-  thdg_offset = -0.12  ## -0.32
+  thdg_offset = -0.35  ## -0.32
   VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
   VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
   VRPlot$PV3 <- c("ATH1", "ATH2", "ATF1", "AT_A")
@@ -187,15 +187,19 @@ if (Project == "PACDEX") {
   VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "PSXC", "QCFC", "EW_DPL", "EW_DPR", "MR")
   VRPlot$PV6 <- c("PSXC", "PS_A", "PSF")
   VRPlot$PV7 <- c("QCF", "QCR", "QCFC", "QCRC", "QC_A", "TASF", "TASR", "TASDRY", "TAS_A", "MACHF", "MACHR", "MACH_A")
-  VRPlot$PV8 <- c("PSF", "QCF", "PS_A", "QC_A")
+  VRPlot$PV8 <- c("PSF", "QCF", "PS_A", "QC_A", 'AKRD')
   VRPlot$PV9 <- c("WDC", "IWD", "WSC", "IWS", "WIC", "ADIFR")
-  VRPlot$PV10 <- c("GGVEW", "VEW", "GGVNS", "VNS", "GGQUAL", "VEWC", "VNSC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
   VRPlot$PV11 <- c("AKRD", "PITCH", "VSPD_A", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
-  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "GGALT", "ALT_A")
-  VRPlot$PV14 <- NA
-  VRPlot$PV15 <- c("CONCN_WCN", "CONCD_", "CONC1DC_")
-  VRPlot$PV16 <- c("DBARD_", "DBAR1DC_", "PLWCD_", "PLWCC", "PLWC", "PLWC1DC_", "RICE", "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
+  VRPlot$PV14 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV15 <- c("CONC1DC_LWO", "CONCD_LWI", "CONCN_WCN", "CONCU100_RWI", "CONCU500_RWI", "CONCU_RWI", "USHFLW_RWI", "USMPFLW_RWI", "UREF_RWI", "USCAT_RWI")
+  VRPlot$PV16 <- c("TCNTD_LWI", "REJDOF_LWI", "AVGTRNS_LWI", "CDPLSRP_LWI")
+  ## list mean diameters, liquid water, RICE
+  VRPlot$PV16 <- c("DBARU_", "DBARD_", "DBAR1DC_", "PLWCD_", "PLWCC", "PLWC", "PLWC1DC_", "RICE")
+  ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
+  VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
   VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")

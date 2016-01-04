@@ -146,27 +146,18 @@ loadVRPlot <- function (Project, psq) {
   RAD <- FI$Variables[grepl ('^RS', FI$Variables) | grepl ('^IR', FI$Variables)]
   CONC <- FI$Variables[grepl ('^CONC', FI$Variables)]
   DBAR <- FI$Variables[grepl ('DBAR', FI$Variables)]
-  LWC <- FI$Variables[grepl ('LWC', FI$Variables)]
+  LWC <- FI$Variables[grepl ('LWC', FI$Variables) & !grepl ('UFLWC', FI$Variables)]
   if ('RICE' %in% FI$Variables) {LWC <- c(LWC, 'RICE')}
-  HSKP <- c()
-  if (any (grepl ('TCNTD_', FI$Variables))) {
-    HSKP <- c(HSKP, FI$Variables[grepl ('TCNTD', FI$Variables)])
-  }
-  if (any (grepl ('REJDOF_', FI$Variables))) {
-    HSKP <- c(HSKP, FI$Variables[grepl ('REJDOF', FI$Variables)])
-  }
-  if (any (grepl ('AVGTRNS_', FI$Variables))) {
-    HSKP <- c(HSKP, FI$Variables[grepl ('AVGTRNS', FI$Variables)])
-  }
-  if (any (grepl ('CDPLSRP_', FI$Variables))) {
-    HSKP <- c(HSKP, FI$Variables[grepl ('CDPLSRP', FI$Variables)])
-  }
   THETA <- FI$Variables[grepl ('THETA', FI$Variables)]
+  im <- pmatch (c ("TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_"),
+               FI$Variables)
+  im <- im[!is.na(im)]
+  HSKP <- FI$Variables[im]
   im <- match(c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL"),
                              FI$Variables)
   im <- im[!is.na(im)]
   CHEM <- FI$Variables[im]
-  im <- match (c ("USHFLW_", "USMPFLW_", "UREF_LMO", "USCAT_LMO"),
+  im <- pmatch (c ("USHFLW_", "USMPFLW_", "UREF_", "USCAT_"),
                FI$Variables)
   im <- im[!is.na(im)]
   USH <- FI$Variables[im]
@@ -183,7 +174,7 @@ loadVRPlot <- function (Project, psq) {
   chp[[9]] <- PS
   chp[[10]] <- QC
   chp[[11]] <- c(TAS,MACH)
-  chp[[12]] <- c(PS,QC)
+  chp[[12]] <- c(PS,QC,'AKRD')
   chp[[13]] <- c(WD,WS,'WIC')
   chp[[14]] <- c(WD,WS)
   chp[[15]] <- c(EW,NS,'GGQUAL')
