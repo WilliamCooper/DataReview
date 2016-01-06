@@ -48,20 +48,20 @@ server <- function (input, output, session) {
     VRPlot[[jp]] <<- PVar  
   })
   
-#   st <- c('track', 'track',
-#           'temperature', 'temperature',
-#           rep('humidity', 4),
-#           rep('pressure', 4),
-#           rep('wind', 7),
-#           'radiation',
-#           rep('particles', 5),
-#           'skew-T',
-#           rep('potential T',2),
-#           rep('CDP',4),
-#           rep('UHSAS/PCASP',4),
-#           rep('2DC', 4),
-#           rep('air chemistry',2),
-#           rep('extras',2))
+  #   st <- c('track', 'track',
+  #           'temperature', 'temperature',
+  #           rep('humidity', 4),
+  #           rep('pressure', 4),
+  #           rep('wind', 7),
+  #           'radiation',
+  #           rep('particles', 5),
+  #           'skew-T',
+  #           rep('potential T',2),
+  #           rep('CDP',4),
+  #           rep('UHSAS/PCASP',4),
+  #           rep('2DC', 4),
+  #           rep('air chemistry',2),
+  #           rep('extras',2))
   
   observe({
     vp <- switch (input$Rplot,
@@ -88,7 +88,7 @@ server <- function (input, output, session) {
   observeEvent (input$reconfigure, saveConfig (), handler.env=.GlobalEnv)
   observeEvent (input$savePDF, 
                 savePDF (Data=data(), inp=input))
-##                handler.env=.GlobalEnv), 
+  ##                handler.env=.GlobalEnv), 
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   observeEvent (input$maneuvers, SeekManeuvers (data ()))
@@ -116,7 +116,7 @@ server <- function (input, output, session) {
       print (sprintf ('set new project: %s', Project))
       VRPlot <<- loadVRPlot (Project, psq)
       FI <<- DataFileInfo (sprintf ('%s%s/%srf05.nc', 
-                                   DataDirectory (), input$Project, input$Project))
+                                    DataDirectory (), input$Project, input$Project))
     }
   })
   
@@ -135,12 +135,24 @@ server <- function (input, output, session) {
     VarList <<- VarList  ## just saving for outside-app use
     ## these are needed for translation to new cal coefficients
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
-    if (grepl ('HIPPO', input$Project)) {
-      fname <- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
-                        input$Flight)
+    if (input$Flight > 0) {
+      if (grepl ('HIPPO', input$Project)) {
+        fname <- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
+                          input$Flight)
+      } else {
+        fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
+                           input$Project, input$Flight)
+      }
     } else {
-      fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
-                       input$Project, input$Flight)
+      if (input$Flight < -5) {
+        fn <- input$Flight + 11
+        fname <- sprintf ('%s%s/%stf%02d.nc', DataDirectory (), input$Project, 
+                          input$Project, fn)
+      } else {
+        fn <- input$Flight + 6
+        fname <- sprintf ('%s%s/%sff%02d.nc', DataDirectory (), input$Project, 
+                          input$Project, fn)
+      }
     }
     getNetCDF (fname, VarList)
   })
@@ -240,13 +252,13 @@ server <- function (input, output, session) {
       }
       if (input$limits) {
         eval(parse(text=sprintf("RPlot%d(DataV, Seq=%d)", 
-                              psq[1, input$plot], psq[2, input$plot])))
+                                psq[1, input$plot], psq[2, input$plot])))
       } else {
         eval(parse(text=sprintf("RPlot%d(Data, Seq=%d)", 
                                 psq[1, input$plot], psq[2, input$plot])))
       }
-#       si <- input$plot
-#       updateSelectInput (session, 'Rplot', selected=st[si])
+      #       si <- input$plot
+      #       updateSelectInput (session, 'Rplot', selected=st[si])
       if (Trace) {print ('finished display')}
     }
   }, width=920, height=680)

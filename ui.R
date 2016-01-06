@@ -11,8 +11,8 @@ ui <- fluidPage (
                    choices=c('ORCAS', 'PACDEX', 'DC3', 'TREX', 'START08', 'TORERO', 'HIPPO-1', 'HIPPO-2', 'HIPPO-3', 'HIPPO-4', 'HIPPO-5', 'CONTRAST', 'MPEX'), width='100px'),
                    actionButton ('reconfigure', 'save config'))
       ),
-    column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=1, 
-                                        min=1, max=50, step=1, width='70px'))),
+    column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=-10, 
+                                        min=-10, max=50, step=1, width='70px'))),
     column (2, wellPanel (numericInput (inputId='plot', label='plot', value=1, 
                                         min=1, max=49, step=1, width='70px'))),
     column(4, wellPanel(
