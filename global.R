@@ -141,7 +141,7 @@ loadVRPlot <- function (Project, psq) {
   WD <- FI$Variables[grepl ('WD', FI$Variables)]
   WS <- FI$Variables[grepl ('WS', FI$Variables) & !grepl ('FLOW', FI$Variables)]
   AT <- FI$Variables[grepl ('^AT', FI$Variables) & !grepl ('ATTACK', FI$Variables)]
-  DP <- FI$Variables[grepl ('^DP_', FI$Variables)]
+  DP <- FI$Variables[grepl ('^DP', FI$Variables)]
   EWW <- FI$Variables[grepl ('^EW', FI$Variables)]
   CAVP <- FI$Variables[grepl ('CAVP', FI$Variables)]
   PS <- FI$Variables[grepl ('^PS', FI$Variables)]
@@ -180,7 +180,7 @@ loadVRPlot <- function (Project, psq) {
   chp[[2]] <- c(ALT,'PSXC')
   chp[[3]] <- AT
   chp[[4]] <- chp[[3]]
-  chp[[5]] <- c(DP,CAVP,EWW)
+  chp[[5]] <- c(DP,'ATX',CAVP,EWW)
   chp[[6]] <- chp[[5]]
   chp[[7]] <- chp[[5]]
   chp[[8]] <- chp[[5]]
