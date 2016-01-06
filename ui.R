@@ -41,7 +41,8 @@ ui <- fluidPage (
                               checkboxInput ('limits','apply restrictions'),
                               uiOutput("ui2"),
                               actionButton ('ncplot', 'see in ncplot'),
-                              actionButton ('Xanadu', 'see in Xanadu')),
+                              actionButton ('Xanadu', 'see in Xanadu'),
+                              actionButton ('maneuvers', 'see maneuvers')),
                  mainPanel( tabsetPanel (tabPanel ('plot', plotOutput (outputId='display')),
                                          tabPanel ('stats', dataTableOutput ('stats')),
                                          tabPanel ('listing', dataTableOutput ('listing')))))

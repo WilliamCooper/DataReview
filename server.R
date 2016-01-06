@@ -91,6 +91,22 @@ server <- function (input, output, session) {
 ##                handler.env=.GlobalEnv), 
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
+  observeEvent (input$maneuvers, SeekManeuvers (data ()))
+  
+  SeekManeuvers <- function (Data) {
+    source ("./PlotFunctions/SpeedRunSearch.R")
+    source ("./PlotFunctions/CircleSearch.R")
+    source ("./PlotFunctions/PitchSearch.R")
+    source ("./PlotFunctions/YawSearch.R")
+    source ("./PlotFunctions/ReverseHeadingSearch.R")
+    print ('list of maneuvers:')
+    PitchSearch (Data)
+    YawSearch (Data)
+    SpeedRunSearch (Data)
+    CircleSearch (Data)
+    ReverseHeadingSearch (Data)
+    print ('end of maneuver list')
+  }
   
   VRP <- reactive ({
     if (Trace) {print (sprintf ('entered VRP, Project=%s %s', 
