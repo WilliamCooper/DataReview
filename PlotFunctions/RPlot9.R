@@ -3,12 +3,12 @@ RPlot9 <- function (data, Seq=NA) {
   ## needs WDC, WSC, WIC, IWD, IWS, ADIFR, QCF, PSF
   op <- par (mar=c(2,5,1,1)+0.1,oma=c(1.1,0,0,0))
   layout(matrix(1:3, ncol = 1), widths = 1, heights = c(5,5,6))
+  line.widths <- c(1,1,2)
+  line.types <- c(1,3,2)
+  # set high transparency (30) to avoid obscuring first trace
+  tgreen <- rgb(0,200,0,120,maxColorValue=255)
+  cs <- c('blue', tgreen, 'red', 'cyan', 'darkorange', 'violet')
   if (!is.na (Seq) && (Seq == 1)) {
-    # set high transparency (30) to avoid obscuring first trace
-    tgreen <- rgb(0,200,0,120,maxColorValue=255)
-    cs <- c('blue', tgreen, 'red', 'cyan', 'darkorange', 'violet')
-    line.widths <- c(1,1,2)
-    line.types <- c(1,3,2)
     WD <- VRPlot[[9]][grepl ('WD', VRPlot[[9]])]
     WS <- VRPlot[[9]][grepl ('WS', VRPlot[[9]])]
     WI <- VRPlot[[9]][grepl ('^WI', VRPlot[[9]])]
@@ -39,13 +39,13 @@ RPlot9 <- function (data, Seq=NA) {
   layout(matrix(1:2, ncol = 1), widths = 1, heights = c(5,6))
   data$IUX <- data$IWS * sin (data$IWD*pi/180)
   data$UIC <- data$WSC * sin (data$WDC*pi/180)
-  plotWAC (data[, c("Time", "UIC", "IUX")], col=line.colors, lwd=line.widths, lty=line.types, 
+  plotWAC (data[, c("Time", "UIC", "IUX")], col=cs, lwd=line.widths, lty=line.types, 
            ylab="easterly wind [m/s]",legend.position=NA)
   legend('bottom',c("UIC", "IUX"),col=c("blue",tgreen),text.col=c("blue",tgreen),lty=c(1,3),lwd=c(1,1),cex=0.75)
   op <- par (mar=c(5,4,1,1)+0.1)
   data$IVY <- -data$IWS * cos (data$IWD*pi/180)
   data$VIC <- -data$WSC * cos (data$WDC*pi/180)
-  plotWAC (data[, c("Time", "VIC", "IVY")], col=line.colors, lwd=line.widths, lty=line.types, 
+  plotWAC (data[, c("Time", "VIC", "IVY")], col=cs, lwd=line.widths, lty=line.types, 
            ylab="southerly wind [m/s]",legend.position=NA)
   legend('bottom',c("VIC", "IVY"),col=c("blue",tgreen),text.col=c("blue",tgreen),lty=c(1,3),lwd=c(1,1),cex=0.75)
   AddFooter ()

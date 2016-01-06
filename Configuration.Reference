@@ -73,7 +73,7 @@ if (Project == "ORCAS") {
   VRPlot$PV15 <- c(VRPlot$PV15, "CONCD_", "CONC1DC_")   # 2nd panel
   VRPlot$PV15 <- c(VRPlot$PV15, "USHFLW_", "USMPFLW_", "UREF_", "USCAT_")  # 3rd panel
   ## list mean diameters, liquid water, RICE
-  VRPlot$PV16 <- c("DBARD_", "DBARU_", "DBAR1DC_", "PLWCD_", "PLWC1DC_", "RICE")
+  VRPlot$PV16 <- c("DBARD_", "DBARU_", "DBAR1DC_", "PLWC", "PLWCC", "PLWCD_", "PLWC1DC_", "RICE")
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio
   VRPlot$PV16 <- c(VRPlot$PV16, "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
   ## plot variable for skew-T sounding (don't normally change)
@@ -271,7 +271,8 @@ if (Project == "PACDEX") {
   VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
   VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
   VRPlot$PV14 <- c(NA)
-  VRPlot$PV15 <- c("CONC1DC_", "CONCD_", "CONCN_WCN", "CONCU100_", "CONCU500_", "CONCU_", "USHFLW_", "USMPFLW_", "UREF_", "USCAT_")
+  VRPlot$PV15 <- c("CONC1DC_LWO", "CONCD_LWI", "CONCN_WCN", "CONCU100_RWI", "CONCU500_RWI", "CONCU_RWI", "USHFLW_RWI", "USMPFLW_RWI", "UREF_RWI", "USCAT_RWI")
+  VRPlot$PV16 <- c("TCNTD_LWI", "REJDOF_LWI", "AVGTRNS_LWI", "CDPLSRP_LWI")
   ## list mean diameters, liquid water, RICE
   VRPlot$PV16 <- c("DBARU_", "DBARD_", "DBAR1DC_", "PLWCD_", "PLWCC", "PLWC", "PLWC1DC_", "RICE")
   ## if CDP present, include TCNTD_ and REJDOF_ to get acceptance ratio

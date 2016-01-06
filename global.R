@@ -71,12 +71,25 @@ saveConfig <- function() {
   linesOut <- c(linesOut, paste('  VRPlot <- list(PV1 = ',list(v), ')', sep=''))
   for (i in 2:length(VRPlot)) {
     v <- as.character(VRPlot[[i]])
-    linesOut <- c(linesOut, paste(sprintf ('  VRPlot$PV%d <- ',i),list(v),sep=''))
+    if (i %in% c(15:16,20:22)) {
+      v <- sub ('_.*', '_', v)
+    }
+    if (length (v) > 1) {
+      linesOut <- c(linesOut, 
+                    paste(sprintf ('  VRPlot$PV%d <- ',i),list(v),sep=''))
+    } else {
+      if (is.na(v) || (length (v) == 0)) {
+        linesOut <- c(linesOut, sprintf ('  VRPlot$PV%d <- c(NA)', i))
+      } else {
+        linesOut <- c(linesOut, sprintf ('  VRPlot$PV%d <- "%s"', i, v))
+      }
+    }
   }
   linesOut <- c(linesOut, '}\n ')
   linesOut <- c(linesOut, lines[endLine:(length(lines))])
   writeLines(linesOut, 'Configuration.R')
   print (sprintf ('saved configuration for %s in Configuration.R', Project))
+  source ('Configuration.R')
   print (str(VRPlot))
 }
 
@@ -108,7 +121,7 @@ savePDF <- function(Data, inp) {
 
 ## get VRPlot and chp/shp:
 ## load a starting-point version
-Project <- 'PACDEX'
+Project <- 'ORCAS'
 loadVRPlot <- function (Project, psq) {
   source ('Configuration.R')
   # print (str(VRPlot))
@@ -121,16 +134,15 @@ loadVRPlot <- function (Project, psq) {
     }
     names(VRPlot) <- nm
   }
-  FI <- DataFileInfo (sprintf ('%s%s/%srf05.nc', DataDirectory (), Project, Project))
+  FI <- DataFileInfo (sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project))
   LAT <- FI$Variables[grepl ('^LAT', FI$Variables)]
   LON <- FI$Variables[grepl ('^LON', FI$Variables)]
   ALT <- FI$Variables[grepl ('ALT', FI$Variables)]
   WD <- FI$Variables[grepl ('WD', FI$Variables)]
   WS <- FI$Variables[grepl ('WS', FI$Variables) & !grepl ('FLOW', FI$Variables)]
-  AT <- FI$Variables[grepl ('^AT', FI$Variables) & !grepl ('ATTACK', FI$Variables)
-                     & !grepl ('ATX', FI$Variables)]
+  AT <- FI$Variables[grepl ('^AT', FI$Variables) & !grepl ('ATTACK', FI$Variables)]
   DP <- FI$Variables[grepl ('^DP_', FI$Variables)]
-  EWW <- FI$Variables[grepl ('^EW', FI$Variables) & !grepl ('EWX', FI$Variables)]
+  EWW <- FI$Variables[grepl ('^EW', FI$Variables)]
   CAVP <- FI$Variables[grepl ('CAVP', FI$Variables)]
   PS <- FI$Variables[grepl ('^PS', FI$Variables)]
   QC <- FI$Variables[grepl ('^QC', FI$Variables) & !grepl ('TEMP', FI$Variables)]
@@ -143,22 +155,23 @@ loadVRPlot <- function (Project, psq) {
   THDG <- FI$Variables[grepl ('THDG', FI$Variables)]
   ACINS <- FI$Variables[grepl ('ACINS', FI$Variables)]
   VSPD <- FI$Variables[grepl ('VSPD', FI$Variables)]
-  RAD <- FI$Variables[grepl ('^RS', FI$Variables) | grepl ('^IR', FI$Variables)]
+  RAD <- FI$Variables[grepl ('^RS', FI$Variables) 
+                      | (grepl ('^IR', FI$Variables) & !grepl ('IRIG', FI$Variables))]
   CONC <- FI$Variables[grepl ('^CONC', FI$Variables)]
   DBAR <- FI$Variables[grepl ('DBAR', FI$Variables)]
   LWC <- FI$Variables[grepl ('LWC', FI$Variables) & !grepl ('UFLWC', FI$Variables)]
   if ('RICE' %in% FI$Variables) {LWC <- c(LWC, 'RICE')}
   THETA <- FI$Variables[grepl ('THETA', FI$Variables)]
   im <- pmatch (c ("TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_"),
-               FI$Variables)
+                FI$Variables)
   im <- im[!is.na(im)]
   HSKP <- FI$Variables[im]
   im <- match(c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL"),
-                             FI$Variables)
+              FI$Variables)
   im <- im[!is.na(im)]
   CHEM <- FI$Variables[im]
   im <- pmatch (c ("USHFLW_", "USMPFLW_", "UREF_", "USCAT_"),
-               FI$Variables)
+                FI$Variables)
   im <- im[!is.na(im)]
   USH <- FI$Variables[im]
   chp <- list ()
@@ -166,29 +179,29 @@ loadVRPlot <- function (Project, psq) {
   chp[[1]] <- c(LAT,LON,WD,WS)
   chp[[2]] <- c(ALT,'PSXC')
   chp[[3]] <- AT
-  chp[[4]] <- c(AT,'ATX')
-  chp[[5]] <- c(DP,'ATX')
-  chp[[6]] <- c(DP,'DPXC')
-  chp[[7]] <- CAVP
-  chp[[8]] <- c(EWW,'EWX')
+  chp[[4]] <- chp[[3]]
+  chp[[5]] <- c(DP,CAVP,EWW)
+  chp[[6]] <- chp[[5]]
+  chp[[7]] <- chp[[5]]
+  chp[[8]] <- chp[[5]]
   chp[[9]] <- PS
-  chp[[10]] <- QC
-  chp[[11]] <- c(TAS,MACH)
+  chp[[10]] <- c(QC,TAS,MACH)
+  chp[[11]] <- chp[[10]]
   chp[[12]] <- c(PS,QC,'AKRD')
   chp[[13]] <- c(WD,WS,'WIC')
-  chp[[14]] <- c(WD,WS)
+  chp[[14]] <- chp[[13]]
   chp[[15]] <- c(EW,NS,'GGQUAL')
-  chp[[16]] <- c(EW,NS)
+  chp[[16]] <- chp[[15]]
   chp[[17]] <- VRPlot[[11]]
   chp[[18]] <- c(PITCH,ROLL,THDG)
   chp[[19]] <- c(ACINS,VSPD,ALT)
   chp[[20]] <- RAD
-  chp[[21]] <- CONC
-  chp[[22]] <- CONC
-  if (length (USH) > 0) {chp[[22]] <- c(CONC, USH)}
-  chp[[23]] <- DBAR
-  chp[[24]] <- LWC
-  chp[[25]] <- HSKP
+  chp[[21]] <- c(CONC)
+  if (length (USH) > 0) {chp[[21]] <- c(CONC, USH)}
+  chp[[22]] <- chp[[21]]
+  chp[[23]] <- c(DBAR,LWC,HSKP)
+  chp[[24]] <- chp[[23]]
+  chp[[25]] <- chp[[23]]
   chp[[26]] <- c('PSXC','ATX', 'DPXC',PS,AT,DP)
   chp[[27]] <- THETA
   chp[[28]] <- THETA
@@ -208,8 +221,8 @@ loadVRPlot <- function (Project, psq) {
   chp[[40]] <- chp[[37]]
   chp[[41]] <- CHEM
   chp[[42]] <- CHEM
-  chp[[43]] <- c('TASX', 'ATX')
-  chp[[44]] <- c('TASX', 'ATX')
+  chp[[43]] <- sort(FI$Variables)
+  chp[[44]] <- sort(FI$Variables)
   chp[[45]] <- c('TASX', 'ATX')
   chp[[46]] <- c('TASX', 'ATX')
   chp[[47]] <- c('TASX', 'ATX')
@@ -258,13 +271,12 @@ makeVRPlot <- function (slp, psq) {
         V <- (c (V, as.vector(slp[[i]])))
       }
     }
+    if (j %in% 15:16) {
+      V <- sub ('_.*$', '_', V)
+    }
     VR[j] <- list(V)
   }
-  nms <- vector ('character', 30)
-  for (j in 1:30) {
-    nms[j] <- sprintf ('PV%d', j)
-  }
-  names(VR) <- nms
+  names(VR) <- sprintf ('PV%d', 1:30)
   return (VR)
 }
 

@@ -8,7 +8,7 @@ ui <- fluidPage (
   fluidRow ( 
     column (2, wellPanel (
       selectInput (inputId='Project', label=NULL, 
-                   choices=c('PACDEX', 'DC3', 'ORCAS', 'START08','CONTRAST', 'MPEX'), width='100px'),
+                   choices=c('ORCAS', 'PACDEX', 'DC3', 'TREX', 'START08', 'TORERO', 'HIPPO-1', 'HIPPO-2', 'HIPPO-3', 'HIPPO-4', 'HIPPO-5', 'CONTRAST', 'MPEX'), width='100px'),
                    actionButton ('reconfigure', 'save config'))
       ),
     column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=1, 

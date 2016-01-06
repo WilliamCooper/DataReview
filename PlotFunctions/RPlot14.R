@@ -7,7 +7,7 @@ RPlot14 <- function(data, ...) {
   # op <- par (mar=c(5,4,1,2.5)+0.1,oma=c(1.1,0,0,0))
   layout(matrix(1:2, ncol = 1), widths = 1, heights = c(5,6))
   op <- par (mar=c(2,4,1,1)+0.1,oma=c(1.1,0,0,0))
-  if ("RSTB" %in% VRPlot[[21]]) {
+  if ("RSTB" %in% VRPlot[[14]]) {
     plotWAC (data[, c("Time", "RSTB")])
   }
   op <- par (mar=c(5,4,1,1)+0.1)

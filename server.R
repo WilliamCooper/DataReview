@@ -1,6 +1,9 @@
 
 server <- function (input, output, session) {
   
+  ## if this is set TRUE then messages will print in the console
+  ## indicating which functions are entered, to trace the sequence
+  ## of interactions when window entries are changed.
   Trace <- FALSE
   
   output$ui2 <- renderUI ({
@@ -37,7 +40,11 @@ server <- function (input, output, session) {
       reac$newdata <- TRUE
     }
     jp <- psq[1, np]
-    if (Trace) {print (sprintf ('redefined global VRPlot[[%d]]', jp))}
+    ## need to change VRPlot to have the specified variables
+    if (Trace) {
+      print (sprintf ('redefined global VRPlot[[%d]]', jp))
+      print (PVar)
+    }
     VRPlot[[jp]] <<- PVar  
   })
   
@@ -86,7 +93,8 @@ server <- function (input, output, session) {
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   
   VRP <- reactive ({
-    if (Trace) {print ('entered VRP')}
+    if (Trace) {print (sprintf ('entered VRP, Project=%s %s', 
+                                input$Project, Project))}
     if (input$Project != Project) {
       Project <<- Project <- input$Project
       print (sprintf ('set new project: %s', Project))
@@ -98,7 +106,7 @@ server <- function (input, output, session) {
   
   data <- reactive({
     if (Trace) {print ('entered data')}
-    Project <<- Project <- input$Project
+    # Project <<- Project <- input$Project
     reac$newdata
     reac$newdata <- FALSE
     VarList <- vector()
@@ -111,8 +119,13 @@ server <- function (input, output, session) {
     VarList <<- VarList  ## just saving for outside-app use
     ## these are needed for translation to new cal coefficients
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
-    fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
+    if (grepl ('HIPPO', input$Project)) {
+      fname <- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
+                        input$Flight)
+    } else {
+      fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
                        input$Project, input$Flight)
+    }
     getNetCDF (fname, VarList)
   })
   
@@ -191,16 +204,16 @@ server <- function (input, output, session) {
       ## see global.R functions:
       DataV <- limitData (Data, input)
       ## guard against inf. VCSEL limits
-      if (min(DataV$DP_VXL, na.rm=TRUE) == Inf) {
+      if (all(is.na(DataV$DP_VXL))) {
         DataV$DP_VXL <- rep(0, nrow(DataV))
       }
-      if (min(DataV$DP_DPR, na.rm=TRUE) == Inf) {
+      if (all(is.na(DataV$DP_DPR))) {
         DataV$DP_DPR <- rep(0, nrow(DataV))
       }
-      if (min(DataV$DP_DPL, na.rm=TRUE) == Inf) {
+      if (all(is.na(DataV$DP_DPL))) {
         DataV$DP_DPL <- rep(0, nrow(DataV))
       }
-      DataV$DPXC[DataV$DPXC < -1000] <- NA
+      DataV$DPXC[!is.na(DataV$DPXC) & (DataV$DPXC < -1000)] <- NA
       if (psq[1, input$plot] %in% c(20:22)) {
         t1 <- input$times[1]
         # print (class(t1))
