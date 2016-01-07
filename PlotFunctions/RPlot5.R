@@ -2,20 +2,25 @@
 RPlot5 <- function (data, Seq=NA) { 
   if (is.na(Seq) || Seq == 1) {
     op <- par (mfrow=c(1,1), mar=c(5,5,2,2)+0.1,oma=c(1.1,0,0,0))
-    ls <- which (VRPlot[[5]] == "ATX")
-    plotWAC (data[, c("Time", VRPlot[[5]][1:ls])], 
-             ylab=expression (paste ("dew point  DPy  [", degree, "C]")), 
-             lty=c(1,1,2,1), lwd=c(2,1.5,1,3), legend.position='bottom', 
-             col=c('blue', 'red', 'darkgreen', 'black'))
+    DP <- c(VRPlot[[5]][grepl ('^DP', VRPlot[[5]])], 'ATX')
+    plotWAC (data[, c("Time", DP)], 
+                      ylab=expression (paste ("dew point  DPy  [", degree, "C]")), 
+                      lty=c(1,1,2,1), lwd=c(2,1.5,1,3), legend.position='bottom', 
+                      col=c('blue', 'red', 'darkgreen', 'black'))
     # pulling legend out of plotWAC to increase font size
-    # legend('bottomright',c("DP_DPL", "DP_DPR", "DP_VXL", "ATX"),col=c("blue","red","darkgreen","black"),text.col=c("blue","red","darkgreen","black"),lty=c(1,1,2,1),lwd=c(2,1.5,1,3))
-    labl <- VRPlot[[5]]
+    # legend('bottomright',c("DP_DPL", "DP_DPR", "DP_VXL", "ATX"),
+    #        col=c("blue","red","darkgreen","black"),
+    #        text.col=c("blue","red","darkgreen","black"),
+    #        lty=c(1,1,2,1),lwd=c(2,1.5,1,3))
+    labl <- DP
     labl <- sub("DP_", "", labl)
     titl <- "Mean diff "
-    for (i in 2:(ls-1)) {
-      titl <- sprintf("%s%s-%s: %.2f; ", titl, labl[i],labl[1],
-                      mean(data[, VRPlot[[5]][i]] -
-                             data[, VRPlot[[5]][1]], na.rm=TRUE))
+    ## assume DPXC is always present:
+    for (dp in DP) {
+      if (dp == 'ATX') {next}
+      dpl <- sub("DP_", "", dp)
+      titl <- sprintf("%s%s-%s: %.2f; ", titl, dpl, 'DPXC',
+                      mean(data[, dp] - data$DPXC, na.rm=TRUE))
     }
     title(titl, cex.main=0.8)
     AddFooter ()
@@ -23,10 +28,15 @@ RPlot5 <- function (data, Seq=NA) {
   }
   
   if (is.na(Seq) || Seq == 2) {
-    DP <- VRPlot[[5]][which (grepl ('DP', VRPlot[[5]]))]
-    ir <- which ('DP_VXL' == DP)
-    if (length(ir) < 1) {ir <- which ('DPV_VXL' == DP)}
-    if (length(ir) != 1) {ir = length(DP)}
+    DP <- VRPlot[[5]][which (grepl ('^DP', VRPlot[[5]]))]
+    ## use DPXC as primary if present, otherwise DP_VXL, otherwise first:
+    ir <- which ('DPXC' == DP)
+    if (length (ir) != 1) {
+      ir <- which ('DP_VXL' == DP)
+    }
+    if (length (ir) != 1) {
+      ir <- which ('DPV_VXL' == DP) ## used in earlier projects
+    }
     colr <- c("blue", "darkgreen", "darkorange", "cyan")
     firstPlot <- TRUE
     i <- 1
@@ -35,7 +45,7 @@ RPlot5 <- function (data, Seq=NA) {
       if (firstPlot) {
         firstPlot <- FALSE
         plot(data[, c(DP[ir], DPV)], pch=20, col=colr[i], 
-             xlab=expression (paste (DP[ir], "[", degree, "C]")),
+             xlab=bquote (.(DP[ir])~'['*degree*C*']'),
              ylab=expression (paste ("dew point  DPy  [", degree, "C]")))
         lines (c(-70.,30.), c(-65,35), col="darkorange", lwd=2, lty=2)
         lines (c(-70.,30.), c(-75,25), col="darkorange", lwd=2, lty=2)
@@ -110,7 +120,8 @@ RPlot5 <- function (data, Seq=NA) {
   ## get EW variables
   VEW <- VRPlot[[5]]
   VEW <- VEW[which ("EW" == substr(VEW, 1, 2))]
-  if (!("EW_VXL" %in% VEW) && ("EW_VXL" %in% names(data))) {VEW <- c(VEW, "EW_VXL")}
+  ## the following was useful in some old projects; suppress now
+  # if (!("EW_VXL" %in% VEW) && ("EW_VXL" %in% names(data))) {VEW <- c(VEW, "EW_VXL")}
   plotWAC (data[, c("Time", c(VEW))], ylab="EWy [hPa]", 
            logxy='y', ylim=c(1e-2, 100),legend.position='bottom',cex.lab=1.5,cex.axis=1.5)
   lineWAC (data$Time, MurphyKoop (data$ATX, data$PSXC), col='cyan', lty=2)

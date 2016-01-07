@@ -137,7 +137,7 @@ server <- function (input, output, session) {
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
     if (input$Flight > 0) {
       if (grepl ('HIPPO', input$Project)) {
-        fname <- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
+        fname <<- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
                           input$Flight)
       } else {
         fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
@@ -146,11 +146,11 @@ server <- function (input, output, session) {
     } else {
       if (input$Flight < -5) {
         fn <- input$Flight + 11
-        fname <- sprintf ('%s%s/%stf%02d.nc', DataDirectory (), input$Project, 
+        fname <<- sprintf ('%s%s/%stf%02d.nc', DataDirectory (), input$Project, 
                           input$Project, fn)
       } else {
         fn <- input$Flight + 6
-        fname <- sprintf ('%s%s/%sff%02d.nc', DataDirectory (), input$Project, 
+        fname <<- sprintf ('%s%s/%sff%02d.nc', DataDirectory (), input$Project, 
                           input$Project, fn)
       }
     }
@@ -266,7 +266,8 @@ server <- function (input, output, session) {
   output$stats <- renderDataTable ({
     if (Trace) {print ('entered stats')}
     Ds <- limitData (data(), input)
-    Ds <- Ds[, c('Time', slp[[input$plot]])]
+    # Ds <- Ds[, c('Time', slp[[input$plot]])]
+    Ds <- Ds[, c('Time', VRPlot[[psq[1, input$plot]]])]
     Ds <- Ds[(Ds$Time > input$times[1]) & (Ds$Time < input$times[2]), ]
     Dstats <- data.frame ()
     Dstats['Time', 1] <- 'Time'
