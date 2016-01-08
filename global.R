@@ -95,7 +95,17 @@ saveConfig <- function() {
 
 savePDF <- function(Data, inp) {
   print ('entered savePDF')
-  plotfile = sprintf("%srf%02dPlots.pdf", inp$Project, inp$Flight)
+  Flight <- inp$Flight
+  if (Flight < 0) {
+    if (Flight < -5) {
+      Flight <- sprintf ('tf%02d', Flight+11)
+    } else {
+      Flight <- sprintf ('ff%02d', Flight+6)
+    }
+  } else {
+    Flight <- sprintf ('rf%02d', Flight)
+  }
+  plotfile = sprintf("%s%sPlots.pdf", inp$Project, Flight)
   unlink (plotfile)
   cairo_pdf (filename = plotfile, onefile=TRUE)
   ## enable something like the next to get individual png files instead of one large pdf
@@ -111,11 +121,19 @@ savePDF <- function(Data, inp) {
       if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {
         print(paste('Plot',np))
         ## eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
-        eval(parse(text=sprintf("RPlot%d(DataV)", np)))
+        if (np == 1) {
+          RPlot1 (DataV, Flight)
+        } else {
+          eval(parse(text=sprintf("RPlot%d(DataV)", np)))
+        }
       }
     }
   }
   dev.off()
+  #   suppressWarnings(if (length (system ('which evince', intern=TRUE)) > 0) {
+  #     system (sprintf ('evince %s', plotfile))
+  #   })
+  rstudio::viewer (plotfile, height='maximize')
   print ('finished savePDF')
 }
 
