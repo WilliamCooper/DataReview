@@ -98,7 +98,7 @@ saveConfig <- function() {
 
 savePDF <- function(Data, inp) {
   print ('entered savePDF')
-  plotfile = sprintf("%s%sPlots.pdf", inp$Project, inp$Flight)
+  plotfile = sprintf("%s%s%02dPlots.pdf", inp$Project, inp$typeFlight, inp$Flight)
   unlink (plotfile)
   cairo_pdf (filename = plotfile, onefile=TRUE)
   ## enable something like the next to get individual png files instead of one large pdf
