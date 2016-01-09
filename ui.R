@@ -9,19 +9,27 @@ ui <- fluidPage (
     column (2, wellPanel (
       selectInput (inputId='Project', label=NULL, 
                    choices=c('ORCAS', 'PACDEX', 'DC3', 'TREX', 'START08', 'TORERO', 'HIPPO-1', 'HIPPO-2', 'HIPPO-3', 'HIPPO-4', 'HIPPO-5', 'CONTRAST', 'MPEX'), width='100px'),
-                   actionButton ('reconfigure', 'save config'))
-      ),
-    column (2, wellPanel (numericInput (inputId='Flight', label='Flight', value=-10, 
-                                        min=-10, max=50, step=1, width='70px'))),
-    column (2, wellPanel (numericInput (inputId='plot', label='plot', value=1, 
-                                        min=1, max=49, step=1, width='70px'))),
+      actionButton ('reconfigure', 'save config'))
+    ),
+    column (4, wellPanel (
+      fluidRow (
+        column (4, numericInput (inputId='Flight', label='Flight', value=1, 
+                                 min=1, max=99, step=1, width='80px')),
+        column (4, radioButtons ('typeFlight', label=NULL, choices=c('rf', 'tf', 'ff'), 
+                                 width='70px', inline=TRUE)),
+        column (4, numericInput (inputId='plot', label='plot', value=1, 
+                                 min=1, max=49, step=1, width='80px'))))),
     column(4, wellPanel(
       # This outputs the dynamic UI component
       uiOutput("ui"))),
-    column(2, wellPanel (actionButton (inputId='savePDF', 'save PDF'),
-                         selectInput ('addVar', label=NULL, 
-                                      choices=c('add var',sort(FI$Variables)))))),
-
+    column(2, wellPanel (
+      fluidRow (
+        column (6, actionButton (inputId='savePDF', label=NULL, icon=icon('file-pdf-o'))),
+        column (6, actionButton (inputId='savePNG', label=NULL, icon=icon('file-image-o')))
+      ),
+      selectInput ('addVar', label=NULL, 
+                   choices=c('add var',sort(FI$Variables)))))),
+  
   sidebarLayout (sidebarPanel(width=2, 
                               textOutput ('M1'),
                               selectInput ('Rplot', label='plot class',

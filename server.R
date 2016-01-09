@@ -88,25 +88,12 @@ server <- function (input, output, session) {
   observeEvent (input$reconfigure, saveConfig (), handler.env=.GlobalEnv)
   observeEvent (input$savePDF, 
                 savePDF (Data=data(), inp=input))
+  observeEvent (input$savePNG, 
+                savePNG (Data=data(), inp=input))
   ##                handler.env=.GlobalEnv), 
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   observeEvent (input$maneuvers, SeekManeuvers (data ()))
-  
-  SeekManeuvers <- function (Data) {
-    source ("./PlotFunctions/SpeedRunSearch.R")
-    source ("./PlotFunctions/CircleSearch.R")
-    source ("./PlotFunctions/PitchSearch.R")
-    source ("./PlotFunctions/YawSearch.R")
-    source ("./PlotFunctions/ReverseHeadingSearch.R")
-    print ('list of maneuvers:')
-    PitchSearch (Data)
-    YawSearch (Data)
-    SpeedRunSearch (Data)
-    CircleSearch (Data)
-    ReverseHeadingSearch (Data)
-    print ('end of maneuver list')
-  }
   
   VRP <- reactive ({
     if (Trace) {print (sprintf ('entered VRP, Project=%s %s', 
@@ -115,8 +102,23 @@ server <- function (input, output, session) {
       Project <<- Project <- input$Project
       print (sprintf ('set new project: %s', Project))
       VRPlot <<- loadVRPlot (Project, psq)
-      FI <<- DataFileInfo (sprintf ('%s%s/%srf05.nc', 
-                                    DataDirectory (), input$Project, input$Project))
+      if (grepl ('HIPPO', Project)) {
+        fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), Project)
+      } else {
+        fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
+      }
+      if (!file.exists (fn)) {
+        if (grepl ('HIPPO', Project)) {
+          fn <- sprintf ('%sHIPPO/%stf01.nc', DataDirectory (), Project)
+        } else {
+          fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
+        }
+      }
+      if (!file.exists (fn)) {
+        warning ('need tf01 or rf01 to initialize')
+      } else {
+        FI <<- DataFileInfo (fn)
+      }
     }
   })
   
@@ -133,28 +135,22 @@ server <- function (input, output, session) {
       }
     }
     VarList <<- VarList  ## just saving for outside-app use
-    ## these are needed for translation to new cal coefficients
+    ## these would be needed for translation to new cal coefficients
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
-    if (input$Flight > 0) {
-      if (grepl ('HIPPO', input$Project)) {
-        fname <<- sprintf ('%sHIPPO/%srf%02d.nc', DataDirectory (), input$Project, 
-                          input$Flight)
-      } else {
-        fname <<- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), input$Project, 
-                           input$Project, input$Flight)
-      }
+    if (grepl ('HIPPO', input$Project)) {
+      fname <<- sprintf ('%sHIPPO/%s%s%02d.nc', DataDirectory (), input$Project, 
+                         input$typeFlight, input$Flight)
     } else {
-      if (input$Flight < -5) {
-        fn <- input$Flight + 11
-        fname <<- sprintf ('%s%s/%stf%02d.nc', DataDirectory (), input$Project, 
-                          input$Project, fn)
-      } else {
-        fn <- input$Flight + 6
-        fname <<- sprintf ('%s%s/%sff%02d.nc', DataDirectory (), input$Project, 
-                          input$Project, fn)
-      }
+      fname <<- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project, 
+                         input$Project, input$typeFlight, input$Flight)
     }
-    getNetCDF (fname, VarList)
+    if (file.exists(fname)) {
+      fname.last <<- fname
+      return (getNetCDF (fname, VarList))
+    } else {
+      warning (sprintf ('the file %s does not exist', fname))
+      return (getNetCDF (fname.last, VarList))
+    }
   })
   
   
@@ -190,14 +186,19 @@ server <- function (input, output, session) {
   
   output$ui <- renderUI({
     if (Trace) {print ('setting time')}
+    step <- 60
+    minT <- data()$Time[1]
+    minT <- minT - as.integer (minT) %% step
+    maxT <- data()$Time[nrow(data())]
+    maxT <- maxT - as.integer (maxT) %% step + step
     sliderInput("times", label=NA,
-                min=data()$Time[1], max=data()$Time[nrow(data())], 
+                min=minT, max=maxT, 
                 #                 max=as.POSIXct (86400+10*3600, origin='2012-05-29', tz='UTC'),
                 value=c(data()$Time[1], data()$Time[nrow(data())]),
                 #                 value=c(as.POSIXct(70000, origin='2012-05-29', tz='UTC'),
                 #                         as.POSIXct(79200, origin='2012-05-29', tz='UTC')),
                 animate=TRUE,
-                step=300, round=2, timeFormat='%T', dragRange=TRUE, timezone='+0000')
+                step=step,  timeFormat='%T', dragRange=TRUE, timezone='+0000')
   }) 
   
   output$display <- renderPlot ({
@@ -215,7 +216,11 @@ server <- function (input, output, session) {
       Data <- data()
       SE <- getStartEnd (Data$Time)
       i <- getIndex (Data$Time, SE[1])
-      FigFooter=sprintf("%s RF%02d %s %s-%s UTC,",Project,input$Flight,strftime(Data$Time[i], format="%Y-%m-%d", tz='UTC'),strftime(Data$Time[i], format="%H:%M:%S", tz='UTC'),strftime(Data$Time[getIndex(Data$Time,SE[2])], format="%H:%M:%S", tz='UTC'))
+      FigFooter=sprintf("%s %s%02d %s %s-%s UTC,", Project, input$typeFlight, 
+                        input$Flight, strftime(Data$Time[i], format="%Y-%m-%d", tz='UTC'),
+                        strftime(Data$Time[i], format="%H:%M:%S", tz='UTC'),
+                        strftime(Data$Time[getIndex(Data$Time,SE[2])], 
+                                 format="%H:%M:%S", tz='UTC'))
       FigDatestr=strftime(Sys.time(), format="%Y-%m-%d %H:%M:%S %Z")
       AddFooter <<- function() {
         CallingFunction <- sub ("\\(.*\\)", "", deparse (sys.call (-1)))
@@ -250,12 +255,18 @@ server <- function (input, output, session) {
         StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
         # print (StartTime)
       }
-      if (input$limits) {
-        eval(parse(text=sprintf("RPlot%d(DataV, Seq=%d)", 
-                                psq[1, input$plot], psq[2, input$plot])))
+      if (fname != fname.last) {
+        warning (sprintf ('requested data file (%s) not found', fname))
+        plot (0,0, xlim=c(0,1), ylim=c(0,1), type='n', axes=FALSE, ann=FALSE)
+        text (0.5, 0.8, sprintf ('requested data file (%s) not found', fname))
       } else {
-        eval(parse(text=sprintf("RPlot%d(Data, Seq=%d)", 
-                                psq[1, input$plot], psq[2, input$plot])))
+        if (input$limits) {
+          eval(parse(text=sprintf("RPlot%d(DataV, Seq=%d)", 
+                                  psq[1, input$plot], psq[2, input$plot])))
+        } else {
+          eval(parse(text=sprintf("RPlot%d(Data, Seq=%d)", 
+                                  psq[1, input$plot], psq[2, input$plot])))
+        }
       }
       #       si <- input$plot
       #       updateSelectInput (session, 'Rplot', selected=st[si])

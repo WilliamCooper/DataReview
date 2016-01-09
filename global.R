@@ -1,6 +1,9 @@
-library(shiny)
-library(Ranadu)
-
+suppressMessages (
+  library(shiny, quietly=TRUE, warn.conflicts=FALSE)
+)
+suppressMessages (suppressWarnings (
+  library(Ranadu, quietly=TRUE, warn.conflicts=FALSE))
+)
 
 nplots <- c(1, 3:17, 19:25)    # project default
 psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
@@ -95,17 +98,7 @@ saveConfig <- function() {
 
 savePDF <- function(Data, inp) {
   print ('entered savePDF')
-  Flight <- inp$Flight
-  if (Flight < 0) {
-    if (Flight < -5) {
-      Flight <- sprintf ('tf%02d', Flight+11)
-    } else {
-      Flight <- sprintf ('ff%02d', Flight+6)
-    }
-  } else {
-    Flight <- sprintf ('rf%02d', Flight)
-  }
-  plotfile = sprintf("%s%sPlots.pdf", inp$Project, Flight)
+  plotfile = sprintf("%s%sPlots.pdf", inp$Project, inp$Flight)
   unlink (plotfile)
   cairo_pdf (filename = plotfile, onefile=TRUE)
   ## enable something like the next to get individual png files instead of one large pdf
@@ -122,7 +115,7 @@ savePDF <- function(Data, inp) {
         print(paste('Plot',np))
         ## eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
         if (np == 1) {
-          RPlot1 (DataV, Flight)
+          RPlot1 (DataV, sprintf ('%s%02d', inp$typeFlight, inp$Flight))
         } else {
           eval(parse(text=sprintf("RPlot%d(DataV)", np)))
         }
@@ -135,6 +128,54 @@ savePDF <- function(Data, inp) {
   #   })
   rstudio::viewer (plotfile, height='maximize')
   print ('finished savePDF')
+}
+savePNG <- function(Data, inp) {
+  print ('entered savePNG')
+#   plotfile = sprintf("%s%sPlots.pdf", inp$Project, inp$Flight)
+#   unlink (plotfile)
+  # cairo_pdf (filename = plotfile, onefile=TRUE)
+  ## enable something like the next to get individual png files instead of one large pdf
+  png (file = sprintf ("./PNG/%s%s%02dPlot%%02d.png", inp$Project, 
+                       inp$typeFlight, inp$Flight), width=800, height=800)
+  print (sprintf ("saving png plots to subdirectory PNG"))
+  DataV <- limitData (Data, inp)
+  t1 <- inp$times[1]
+  t <- as.POSIXlt (t1)
+  StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
+  DataV <- DataV[(DataV$Time > inp$times[1]) & (DataV$Time < inp$times[2]), ]
+  for (np in 1:30) {
+    if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
+      if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {
+        print(paste('Plot',np))
+        ## eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
+        if (np == 1) {
+          RPlot1 (DataV, sprintf ('%s%02d', inp$typeFlight, inp$Flight))
+        } else {
+          eval(parse(text=sprintf("RPlot%d(DataV)", np)))
+        }
+      }
+    }
+  }
+  dev.off()
+  #   suppressWarnings(if (length (system ('which evince', intern=TRUE)) > 0) {
+  #     system (sprintf ('evince %s', plotfile))
+  #   })
+  print ('finished savePNG')
+}
+
+SeekManeuvers <- function (Data) {
+  source ("./PlotFunctions/SpeedRunSearch.R")
+  source ("./PlotFunctions/CircleSearch.R")
+  source ("./PlotFunctions/PitchSearch.R")
+  source ("./PlotFunctions/YawSearch.R")
+  source ("./PlotFunctions/ReverseHeadingSearch.R")
+  print ('list of maneuvers:')
+  PitchSearch (Data)
+  YawSearch (Data)
+  SpeedRunSearch (Data)
+  CircleSearch (Data)
+  ReverseHeadingSearch (Data)
+  print ('end of maneuver list')
 }
 
 ## get VRPlot and chp/shp:
@@ -152,7 +193,15 @@ loadVRPlot <- function (Project, psq) {
     }
     names(VRPlot) <- nm
   }
-  FI <- DataFileInfo (sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project))
+  fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
+  if (!file.exists (fn)) {
+    fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
+  }
+  if (!file.exists (fn)) {
+    warning ('need tf01 or rf01 to initialize')
+    return (VRPlot)
+  }
+  FI <- DataFileInfo (fn)
   LAT <- FI$Variables[grepl ('^LAT', FI$Variables)]
   LON <- FI$Variables[grepl ('^LON', FI$Variables)]
   ALT <- FI$Variables[grepl ('ALT', FI$Variables)]
@@ -264,7 +313,12 @@ loadVRPlot <- function (Project, psq) {
   return (VRPlot)
 }
 
-FI <- DataFileInfo (sprintf ('%s%s/%srf05.nc', DataDirectory (), Project, Project))
+fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
+if (!file.exists (fn)) {
+  fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
+}
+if (!file.exists (fn)) {warning ('need tf01 or rf01 to initialize')}
+FI <- DataFileInfo (fn)
 
 limitData <- function (Data, input) {
   DataV <- Data
