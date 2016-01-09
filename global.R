@@ -126,7 +126,9 @@ savePDF <- function(Data, inp) {
   #   suppressWarnings(if (length (system ('which evince', intern=TRUE)) > 0) {
   #     system (sprintf ('evince %s', plotfile))
   #   })
-  rstudio::viewer (plotfile, height='maximize')
+  if (suppressWarnings(library(rstudio, logical.return=TRUE))) {
+    rstudio::viewer (plotfile, height='maximize')
+  }
   print ('finished savePDF')
 }
 savePNG <- function(Data, inp) {
