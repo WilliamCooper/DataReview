@@ -149,7 +149,21 @@ server <- function (input, output, session) {
       return (getNetCDF (fname, VarList))
     } else {
       warning (sprintf ('the file %s does not exist', fname))
-      return (getNetCDF (fname.last, VarList))
+      if (exists ('fname.last')) {
+        return (getNetCDF (fname.last, VarList))
+      } else {
+        ## try tf01
+        fname.last <<- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project, 
+                                input$Project, 'tf', input$Flight)
+        if (file.exists (fname.last)) {
+          warning (sprintf ('switched to tf%02d because rf%02d does not exist', 
+                   input$Flight, input$Flight))
+          updateRadioButtons (session, 'typeFlight', label=NULL, selected='tf')
+          return (getNetCDF (fname.last, VarList))
+        } else {
+          return ()
+        }
+      }
     }
   })
   
