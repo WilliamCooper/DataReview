@@ -53,6 +53,258 @@ if (Project == "ORCAS") {
   VRPlot$PV29 <- c("TASX", "ATX")
   VRPlot$PV30 <- c("TASX", "ATX")
 }
+
+
+if (Project == "CSET") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATH1", "ATH2", "ATF1", "AT_A")
+  VRPlot$PV4 <- c("ATH1", "ATH2", "ATF1", "AT_A")
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("IWD", "WDC", "IWS", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPD", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
+  VRPlot$PV14 <- "RSTB"
+  VRPlot$PV15 <- c("CONC1DC_", "CONCD_", "CONCN", "CONCU100_", "CONCU500_", "CONCU_", "USHFLW_", "USMPFLW_", "UREF_", "USCAT_")
+  VRPlot$PV16 <- c("DBAR1DC_", "DBARD_", "DBARU_", "PLWC", "PLWC1DC_", "PLWCC", "PLWCD_", "RICE", "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- c("CCDP_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "NOREASTER") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATHR1", "ATHR2", "ATFH1", "ATFH2", "AT_A")
+  VRPlot$PV4 <- VRPlot$PV3
+  VRPlot$PV5 <- c("DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "EW_DPL", "EW_DPR", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("IWD", "WDC", "IWS", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPD", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
+  VRPlot$PV14 <- NA
+  VRPlot$PV15 <- NA
+  VRPlot$PV16 <- NA
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- NA
+  VRPlot$PV21 <- NA
+  VRPlot$PV22 <- NA
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "HCRTEST") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATHR1", "ATHR2", "ATFH1", "ATFH2", "AT_A")
+  VRPlot$PV4 <- VRPlot$PV3
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("IWD", "WDC", "IWS", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPD", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
+  VRPlot$PV14 <- NA
+  VRPlot$PV15 <- c("CONC1DC_", "CONCD_" )
+  VRPlot$PV16 <- c("DBAR1DC_", "DBARD_", "PLWC1DC_", "PLWCD_", "RICE", "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- c("CCDP_", "TASX")
+  VRPlot$PV21 <- NA
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "DEEPWAVE") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATHR1", "ATHR2", "ATRL", "AT_A")
+  VRPlot$PV4 <- c("ATHR1", "ATHR2", "ATRL", "AT_A")
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("IWD", "WDC", "IWS", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPD", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "VSPD_A", "ALT_A", "GGALT")
+  VRPlot$PV14 <- NA
+  VRPlot$PV15 <- c("CNCONC", "CONCU100_", "CONCU500_", "CONCU_", "USHFLW_", "USMPFLW_", "UREF_", "USCAT_")
+  VRPlot$PV16 <- c("DBARU_", "RICE")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- NA
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
+  VRPlot$PV22 <- NA
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "CONTRAST") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATFH1", "ATFH2", "ATHR1", "ATHR2", "AT_A")
+  VRPlot$PV4 <- VRPlot$PV3
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("IWD", "WDC", "IWS", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPDB", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- c("PITCH", "PITCH_IRS2", "ROLL", "ROLL_IRS2", "THDG", "THDG_IRS2")
+  VRPlot$PV13 <- c("ACINS", "ACINS_IRS2", "VSPD", "GVSPD_A", "GALT_A", "GGALT")
+  VRPlot$PV14 <- c('VISBC', 'VISTC', 'VISTHT')
+  VRPlot$PV15 <- c("CONC1DC_", "CONCD_", "CONCU100_", "CONCU500_", "CONCU_", "USHFLW_", "USMPFLW_", "UREF_", "USCAT_")
+  VRPlot$PV16 <- c("DBAR1DC_", "DBARD_", "DBARU_", "PLWC", "PLWC1DC_", "PLWCC", "PLWCD_", "RICE", "TCNTD_", "REJDOF_", "AVGTRNS_", "CDPLSRP_")
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- c("CCDP_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
+  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV23 <- c('CORAW_AL', 'FO3_ACD', 'CO2C_PIC2311', 'H2O_PIC2311')
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "SPRITE-II") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATHR1", "ATHR2", "ATRL", "AT_A")
+  VRPlot$PV4 <- VRPlot$PV3
+  VRPlot$PV5 <- c("DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "EW_DPL", "EW_DPR", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACH_A2")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("WDC", "WSC", "WIC")
+  VRPlot$PV10 <- NA
+  VRPlot$PV11 <- c("AKRD", "PITCH", "GGVSPDB", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- NA
+  VRPlot$PV13 <- NA
+  VRPlot$PV14 <- NA
+  VRPlot$PV15 <- NA
+  VRPlot$PV16 <- NA
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- NA
+  VRPlot$PV21 <- NA
+  VRPlot$PV22 <- NA
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
+
+if (Project == "MPEX") {
+  pitch_offset = 0.18
+  roll_offset = -0.12
+  thdg_offset = -0.54
+  VRPlot <- list(PV1 = c("LATC", "LONC", "WDC", "WSC"))
+  VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
+  VRPlot$PV3 <- c("ATH2", "ATF1", "AT_A")
+  VRPlot$PV4 <- VRPlot$PV3
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
+  VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHX")
+  VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
+  VRPlot$PV9 <- c("WDC", "WSC", "WIC")
+  VRPlot$PV10 <- c("GGVEW", "VEW", "VEWC", "GGVNS", "VNS", "VNSC", "GGQUAL")
+  VRPlot$PV11 <- c("AKRD", "PITCH", "VSPD_A", "TASX", "SSRD", "WDC", "WSC", "GGVEW", "GGVNS")
+  VRPlot$PV12 <- NA
+  VRPlot$PV13 <- NA
+  VRPlot$PV14 <- NA
+  VRPlot$PV15 <- NA
+  VRPlot$PV16 <- NA
+  VRPlot$PV17 <- c("PSXC", "ATX", "DPXC")
+  VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
+  VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "PSXC", "ATX", "PSXC", "EWX")
+  VRPlot$PV20 <- NA
+  VRPlot$PV21 <- NA
+  VRPlot$PV22 <- NA
+  VRPlot$PV23 <- c(NA)
+  VRPlot$PV24 <- c("ATX", "TASX")
+  VRPlot$PV25 <- c("ATX", "TASX")
+  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV27 <- c("TASX", "ATX")
+  VRPlot$PV28 <- c("TASX", "ATX")
+  VRPlot$PV29 <- c("TASX", "ATX")
+  VRPlot$PV30 <- c("TASX", "ATX")
+}
  
 
 if (Project == "DC3") {

@@ -1,3 +1,7 @@
+
+## clear global environment that might be left from the last run
+rm(list=ls(all=TRUE))
+
 suppressMessages (
   library(shiny, quietly=TRUE, warn.conflicts=FALSE)
 )
@@ -28,6 +32,33 @@ SmoothInterp <- function (x) {
   return (signal::filter(signal::sgolay(3, 61), d))
 }
 
+## assemble a list of projects for which an appropriately named rf01
+## exists in the data directory:
+
+PJ <- c('ORCAS', 'CSET', 'NOREASTER', 'HCRTEST',
+        'DEEPWAVE', 'CONTRAST', 'SPRITE-II', 'MPEX', 'DC3',
+        'TORERO', 'HIPPO-5', 'HIPPO-4', 'HIPPO-3', 'HIPPO-2',
+        'HIPPO-1','PREDICT', 'START08', 'PACDEX', 'TREX')
+for (P in PJ) {
+  if (grepl('HIPPO', P)) {
+    fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), P)
+  } else {
+    fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), P, P)
+    if (!file.exists (fn)) {
+      fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), P, P)
+    }
+  }
+  if (!file.exists (fn)) {PJ[PJ==P] <- NA}
+}
+PJ <- PJ[!is.na(PJ)]
+
+## now test that there is an entry in the Configuration.R file for PJ:
+lines <- readLines ('Configuration.R')
+for (P in PJ) {
+  if (!any (grepl (P, lines))) {PJ[PJ == P] <- NA}
+}
+PJ <- PJ[!is.na(PJ)]
+rm (lines)
 
 ## make plot functions available
 for (np in 1:2) {
@@ -185,6 +216,8 @@ SeekManeuvers <- function (Data) {
 Project <- 'ORCAS'
 loadVRPlot <- function (Project, psq) {
   source ('Configuration.R')
+  # print (sprintf ('in loadVRPlot, Project=%s', Project))
+  # print (VRPlot)
   # print (str(VRPlot))
   ## this leaves VRPlot defined
   if (length(VRPlot) < 30) {
@@ -203,7 +236,8 @@ loadVRPlot <- function (Project, psq) {
     warning ('need tf01 or rf01 to initialize')
     return (VRPlot)
   }
-  FI <- DataFileInfo (fn)
+  # print (sprintf ('setting chp/slp from %s', fn))
+  FI <<- DataFileInfo (fn)
   LAT <- FI$Variables[grepl ('^LAT', FI$Variables)]
   LON <- FI$Variables[grepl ('^LON', FI$Variables)]
   ALT <- FI$Variables[grepl ('ALT', FI$Variables)]
