@@ -134,7 +134,7 @@ server <- function (input, output, session) {
         FI <<- DataFileInfo (fn)
         if (Trace) {print (sprintf ('using file %s for FI', fn))}
       }
-      VRPlot <<- loadVRPlot (Project, psq)
+      VRPlot <<- loadVRPlot (Project, FALSE, 1, psq)
     }
   }, priority=10)
 
@@ -164,14 +164,29 @@ server <- function (input, output, session) {
                          input$Project, typeFlight, input$Flight)
     }
     if (input$Production) {
-      scmd <- sprintf ('ls -lt `/bin/find /scr/raf/Prod_Data/%s -ipath movies -prune -o -name %s%s%02d.nc`',
-                       Project, Project, input$typeFlight, input$Flight)
+      dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
+      scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
+                       dr, Project, input$typeFlight, input$Flight)
       fl <- system (scmd, intern=TRUE)[1]
-      if (length (fl) > 0) {
+      if ((length (fl) > 0) && (!grepl ('total', fl))) {
+        fname <- sub ('.* /', '/', fl[1])
+      }
+      scmd <- sub ('\\.nc', '.Rdata', scmd)
+      fl <- system (scmd, intern=TRUE)[1]
+      if ((length (fl) > 0) && (!grepl ('total', fl))) {
         fname <- sub ('.* /', '/', fl[1])
       }
     }
     if (Trace) {print (sprintf ('in data, fname=%s', fname))}
+    fnRdata <- sub ('\\.nc', '.Rdata', fname)
+    if (file.exists (fnRdata)) {
+      print ('found Rdata file')
+      fl <- load (file=fnRdata)
+      print (fl)
+      FI <<- DataFileInfo (fnRdata)
+      loadVRPlot (Project, TRUE, input$Flight, psq)
+      return (Data)
+    }
     if (file.exists(fname)) {
       D <- getNetCDF (fname, VarList)
       if (length (D) > 1) {

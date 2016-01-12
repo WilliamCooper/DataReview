@@ -164,8 +164,8 @@ savePDF <- function(Data, inp) {
 }
 savePNG <- function(Data, inp) {
   print ('entered savePNG')
-#   plotfile = sprintf("%s%sPlots.pdf", inp$Project, inp$Flight)
-#   unlink (plotfile)
+  #   plotfile = sprintf("%s%sPlots.pdf", inp$Project, inp$Flight)
+  #   unlink (plotfile)
   # cairo_pdf (filename = plotfile, onefile=TRUE)
   ## enable something like the next to get individual png files instead of one large pdf
   png (file = sprintf ("./PNG/%s%s%02dPlot%%02d.png", inp$Project, 
@@ -214,7 +214,7 @@ SeekManeuvers <- function (Data) {
 ## get VRPlot and chp/shp:
 ## load a starting-point version
 Project <- 'ORCAS'
-loadVRPlot <- function (Project, psq) {
+loadVRPlot <- function (Project, Production, Flight, psq) {
   source ('Configuration.R')
   # print (sprintf ('in loadVRPlot, Project=%s', Project))
   # print (VRPlot)
@@ -228,10 +228,21 @@ loadVRPlot <- function (Project, psq) {
     }
     names(VRPlot) <- nm
   }
-  fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
+  fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), Project, Project, Flight)
   if (!file.exists (fn)) {
     fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
   }
+  ## if Production load production-file info
+  if (Production) {
+    dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
+    scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.Rdata`',
+                     dr, Project, 'rf', Flight)
+    fl <- system (scmd, intern=TRUE)[1]
+    if ((length (fl) > 0) && (!grepl ('total', fl))) {
+      fn <- sub ('.* /', '/', fl[1])
+    }
+  }
+  
   if (!file.exists (fn)) {
     warning ('need tf01 or rf01 to initialize')
     return (VRPlot)
@@ -388,4 +399,4 @@ makeVRPlot <- function (slp, psq) {
   return (VR)
 }
 
-VRPlot <- loadVRPlot(Project, psq)
+VRPlot <- loadVRPlot(Project, FALSE, 1, psq)
