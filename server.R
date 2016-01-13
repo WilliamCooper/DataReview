@@ -87,9 +87,11 @@ server <- function (input, output, session) {
 
   observeEvent (input$reconfigure, saveConfig (), handler.env=.GlobalEnv)
   observeEvent (input$savePDF,
-                savePDF (Data=data(), handler.env=.GlobalEnv))
+                savePDF (Data=data(), inp=input))
   observeEvent (input$savePNG,
-                savePNG (Data=data(), handler.env=.GlobalEnv))
+                savePNG (Data=data(), inp=input))
+  observeEvent (input$saveRdata,
+                saveRdata (Data=data(), inp=input))
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   observeEvent (input$maneuvers, SeekManeuvers (data ()), handler.env=.GlobalEnv)
@@ -164,6 +166,7 @@ server <- function (input, output, session) {
                          input$Project, typeFlight, input$Flight)
     }
     if (input$Production) {
+      print (sprintf ('Production section, input$Production=%d', input$Production))
       dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
       scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
                        dr, Project, input$typeFlight, input$Flight)
@@ -182,9 +185,8 @@ server <- function (input, output, session) {
     if (file.exists (fnRdata)) {
       print ('found Rdata file')
       fl <- load (file=fnRdata)
-      print (fl)
       FI <<- DataFileInfo (fnRdata)
-      loadVRPlot (Project, TRUE, input$Flight, psq)
+      loadVRPlot (Project, input$Production, input$Flight, psq)
       return (Data)
     }
     if (file.exists(fname)) {

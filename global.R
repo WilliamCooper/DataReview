@@ -196,6 +196,15 @@ savePNG <- function(Data, inp) {
   print ('finished savePNG')
 }
 
+saveRdata <- function (Data, inp) {
+  print ('entered saveRdata')
+  fn <- sprintf ('%s%s/%s%s%02d.Rdata', DataDirectory (),
+                 inp$Project, inp$Project, inp$typeFlight,
+                 inp$Flight)
+  save (Data, file=fn)
+  print (sprintf ('saved data.frame to %s', fn))
+}
+
 SeekManeuvers <- function (Data) {
   source ("./PlotFunctions/SpeedRunSearch.R")
   source ("./PlotFunctions/CircleSearch.R")
@@ -234,6 +243,8 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   }
   ## if Production load production-file info
   if (Production) {
+    print (sprintf ('production section in global, Production=%d',
+                    Production))
     dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
     scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.Rdata`',
                      dr, Project, 'rf', Flight)

@@ -31,8 +31,9 @@ ui <- fluidPage (
                   timezone='+0000'))),
     column(2, wellPanel (
       fluidRow (
-        column (6, actionButton (inputId='savePDF', label=NULL, icon=icon('file-pdf-o'))),
-        column (6, actionButton (inputId='savePNG', label=NULL, icon=icon('file-image-o')))
+        column (3, actionButton (inputId='savePDF', label=NULL, icon=icon('file-pdf-o'))),
+        column (3, actionButton (inputId='savePNG', label=NULL, icon=icon('file-image-o'))),
+        column (3, actionButton (inputId='saveRdata', label=NULL, icon=icon('file-archive-o')))
       ),
       selectInput ('addVar', label=NULL,
                    choices=c('add var',sort(FI$Variables)))))),
