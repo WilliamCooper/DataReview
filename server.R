@@ -44,6 +44,7 @@ server <- function (input, output, session) {
     if (Trace) {
       print (sprintf ('redefined global VRPlot[[%d]]', jp))
       print (PVar)
+      reac$newdisplay <- TRUE
     }
     VRPlot[[jp]] <<- PVar
   }, priority=-5)
@@ -165,25 +166,25 @@ server <- function (input, output, session) {
       fname <<- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project,
                          input$Project, typeFlight, input$Flight)
     }
-    if (input$Production) {
-      print (sprintf ('Production section, input$Production=%d', input$Production))
-      dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
-      scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
-                       dr, Project, input$typeFlight, input$Flight)
-      fl <- system (scmd, intern=TRUE)[1]
-      if ((length (fl) > 0) && (!grepl ('total', fl))) {
-        fname <- sub ('.* /', '/', fl[1])
-      }
-      scmd <- sub ('\\.nc', '.Rdata', scmd)
-      fl <- system (scmd, intern=TRUE)[1]
-      if ((length (fl) > 0) && (!grepl ('total', fl))) {
-        fname <- sub ('.* /', '/', fl[1])
-      }
-    }
+#     if (input$Production) {
+#       print (sprintf ('Production section, input$Production=%d', input$Production))
+#       dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
+#       scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
+#                        dr, Project, input$typeFlight, input$Flight)
+#       fl <- system (scmd, intern=TRUE)[1]
+#       if ((length (fl) > 0) && (!grepl ('total', fl))) {
+#         fname <- sub ('.* /', '/', fl[1])
+#       }
+#       scmd <- sub ('\\.nc', '.Rdata', scmd)
+#       fl <- system (scmd, intern=TRUE)[1]
+#       if ((length (fl) > 0) && (!grepl ('total', fl))) {
+#         fname <- sub ('.* /', '/', fl[1])
+#       }
+#     }
     if (Trace) {print (sprintf ('in data, fname=%s', fname))}
     fnRdata <- sub ('\\.nc', '.Rdata', fname)
     if (file.exists (fnRdata)) {
-      print ('found Rdata file')
+      print ('using Rdata file')
       fl <- load (file=fnRdata)
       FI <<- DataFileInfo (fnRdata)
       loadVRPlot (Project, input$Production, input$Flight, psq)
