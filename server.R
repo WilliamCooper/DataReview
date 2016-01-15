@@ -95,7 +95,7 @@ server <- function (input, output, session) {
                 saveRdata (Data=data(), inp=input))
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
-  observeEvent (input$maneuvers, SeekManeuvers (data ()), handler.env=.GlobalEnv)
+  observeEvent (input$maneuvers, SeekManeuvers (data ()))
 
   flightType <- reactive ({
     ## reset typeFlight to rf
@@ -267,10 +267,9 @@ server <- function (input, output, session) {
     minT <- minT - as.integer (minT) %% step
     maxT <- data()$Time[nrow(data())]
     maxT <- maxT - as.integer (maxT) %% step + step
-    updateSliderInput(session, "times", label=NULL,
-                value=c(data()$Time[1], data()$Time[nrow(data())]),
-                min=minT, max=maxT,
-                step=step)
+    updateSliderInput(session, inputId='times', label=NULL,
+                value=c(minT, maxT),
+                min=minT, max=maxT)
   })
 
   output$display <- renderPlot ({
@@ -372,7 +371,7 @@ server <- function (input, output, session) {
     Ds <- limitData (data(), input)
     # Ds <- Ds[, c('Time', slp[[input$plot]])]
     Ds <- Ds[, c('Time', VRPlot[[psq[1, input$plot]]])]
-    Ds <- Ds[(Ds$Time > input$times[1]) & (Ds$Time < input$times[2]), ]
+    Ds <- Ds[(Ds$Time >= input$times[1]) & (Ds$Time <= input$times[2]), ]
     Dstats <- data.frame ()
     Dstats['Time', 1] <- 'Time'
     Dstats['Time', 2] <- NA
@@ -396,7 +395,56 @@ server <- function (input, output, session) {
     if (Trace) {print (str(Dstats))}
     Dstats
   }, options=list(paging=FALSE, searching=FALSE))
+  
+  output$hist <- renderPlot ({
+    input$PlotVar
+    layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(8,8,8))
+    op <- par (mar=c(5.2,5,1,1)+0.1,oma=c(1.1,0,0,0))
+    if (Trace) {print ('entered hist')}
+    Ds <- limitData (data(), input)
+    # Ds <- Ds[, c('Time', slp[[input$plot]])]
+    Ds <- Ds[, c('Time', VRPlot[[psq[1, input$plot]]])]
+    Ds <- Ds[(Ds$Time > input$times[1]) & (Ds$Time < input$times[2]), ]
+    kount <- 0
+    for (nm in names (Ds)) {
+      if (nm == 'Time') {next}
+      kount <- kount + 1
+      if (kount > 6) {break}
+      hist (Ds[ ,nm], freq=FALSE, breaks=50, xlab=nm, 
+            ylab='probability density', main=NA)
+    }
+  }, width=920, height=680)
 
+  output$barWvsZ <- renderPlot ({
+    if (Trace) {print ('entered barXvsZ')}
+    input$PlotVar
+    layout (matrix(1:6, ncol=3), widths=c(5,5,5), heights=c(8,8))
+    op <- par (mar=c(5.2,5,1,1)+0.1,oma=c(1.1,0,0,0))
+    Ds <- limitData (data(), input)
+    
+    Ds <- Ds[, c('Time', VRPlot[[psq[1, input$plot]]], 'GGALT')]
+    Ds <- Ds[(Ds$Time > input$times[1]) & (Ds$Time < input$times[2]), ]
+    Ds <- Ds[!is.na (Ds$GGALT), ]
+    kount <- 0
+    for (nm in names (Ds)) {
+      if (nm == 'Time') {next}
+      if (nm == 'GGALT') {next}
+      kount <- kount + 1
+      if (kount > 6) {break}
+      DB <- data.frame ('Z1'=Ds[, nm])
+      DB[Ds$GGALT > 1000, 'Z1'] <- NA
+      for (j in 2:15) {
+        zmax <- j*1000
+        zmin <- zmax-1000
+        V <- sprintf ('Z%d', j)
+        DB[,V] <- Ds[, nm]
+        DB[(Ds$GGALT < zmin) | (Ds$GGALT > zmax), V] <- NA
+      }
+      boxplot (DB, horizontal=TRUE, outline=FALSE, 
+               xlab=nm, ylab='altitude [km]', names=NULL)
+    }
+  }, width=920, height=680)
+  
   output$listing <- renderDataTable ({
     if (Trace) {print ('entered listing')}
     Ds <- limitData (data(), input)
@@ -408,6 +456,8 @@ server <- function (input, output, session) {
   outputOptions (output, 'display', priority=-10)
   outputOptions (output, 'stats', priority=-10)
   outputOptions (output, 'listing', priority=-10)
+  outputOptions (output, 'hist', priority=-10)
+  outputOptions (output, 'barWvsZ', priority=-10)
 }
 
 

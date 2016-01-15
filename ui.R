@@ -2,7 +2,7 @@ library(shiny)
 library(Ranadu)
 
 minT <- as.POSIXct(0, origin='2012-05-29', tz='UTC')
-maxT <- as.POSIXct(86400, origin='2012-05-29', tz='UTC')
+maxT <- as.POSIXct(3600*8, origin='2012-05-29', tz='UTC')
 step <- 60
 ui <- fluidPage (
   # titlePanel (tags$h1 ('Data Review')),
@@ -27,7 +27,8 @@ ui <- fluidPage (
       sliderInput("times", label=NA, min=minT, max=maxT,
                   value=c(minT, maxT),
                   animate=TRUE,
-                  step=step,  timeFormat='%T', dragRange=TRUE,
+                  step=step,  
+                  timeFormat='%T', dragRange=TRUE,
                   timezone='+0000'))),
     column(2, wellPanel (
       fluidRow (
@@ -61,5 +62,7 @@ ui <- fluidPage (
                               actionButton ('maneuvers', 'see maneuvers')),
                  mainPanel( tabsetPanel (tabPanel ('plot', plotOutput (outputId='display')),
                                          tabPanel ('stats', dataTableOutput ('stats')),
+                                         tabPanel ('histograms', plotOutput (outputId='hist')),
+                                         tabPanel ('soundings', plotOutput (outputId='barWvsZ')),
                                          tabPanel ('listing', dataTableOutput ('listing')))))
 )
