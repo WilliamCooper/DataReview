@@ -24,14 +24,6 @@ testPlot <- function (k) {
   return(k %in% nplots || nplots == 0)
 }
 
-SmoothInterp <- function (x) {
-  ## skip if there are fewer than 100 measurements
-  if (length (x[!is.na(x)]) < 100) {return (x)}
-  d <- zoo::na.approx (as.vector(x), maxgap=100, na.rm = FALSE)
-  d[is.na(d)] <- 0
-  return (signal::filter(signal::sgolay(3, 61), d))
-}
-
 ## assemble a list of projects for which an appropriately named rf01
 ## exists in the data directory:
 
@@ -59,6 +51,9 @@ for (P in PJ) {
 }
 PJ <- PJ[!is.na(PJ)]
 rm (lines)
+
+times <- c(as.POSIXct(0, origin='2012-05-29', tz='UTC'),
+           as.POSIXct(3600*8, origin='2012-05-29', tz='UTC'))
 
 ## make plot functions available
 for (np in 1:2) {
@@ -383,8 +378,10 @@ limitData <- function (Data, input) {
   namesV <- names(DataV)
   namesV <- namesV[namesV != "Time"]
   if (input$limits) {
-    t <- !is.na (DataV$TASX) & (DataV$TASX < 110)
-    t <- t | (abs(DataV$ROLL) > 5)
+    t <- !is.na (DataV$TASX) & (DataV$TASX < input$minTAS)
+    t <- t | (abs(DataV$ROLL) > input$maxROLL)
+    t <- t | (DataV$GGALT/1000 < input$minZ)
+    t <- t | (DataV$VSPD > input$maxROC)
     t[is.na(t)] <- FALSE
     DataV[t, namesV] <- NA
   }
