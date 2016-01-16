@@ -257,8 +257,8 @@ server <- function (input, output, session) {
                                 isolate(input$Project),
                                 isolate (input$typeFlight),
                                 isolate (input$Flight)))}
-    reac$newdisplay
-    reac$newdisplay <- TRUE
+#     reac$newdisplay
+#     reac$newdisplay <- TRUE
     step <- 60
     if (length (data ()) < 2) {
       reac$newdata <- TRUE
@@ -384,6 +384,7 @@ server <- function (input, output, session) {
 
   output$stats <- renderDataTable ({
     if (Trace) {print ('entered stats')}
+    input$times
     Ds <- limitData (data(), input)
     # Ds <- Ds[, c('Time', slp[[input$plot]])]
     Ds <- Ds[, c('Time', VRPlot[[psq[1, input$plot]]])]
@@ -414,6 +415,7 @@ server <- function (input, output, session) {
   
   output$hist <- renderPlot ({
     input$PlotVar
+    input$times
     layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(8,8,8))
     op <- par (mar=c(5.2,5,1,1)+0.1,oma=c(1.1,0,0,0))
     if (Trace) {print ('entered hist')}
@@ -434,6 +436,7 @@ server <- function (input, output, session) {
   output$barWvsZ <- renderPlot ({
     if (Trace) {print ('entered barXvsZ')}
     input$PlotVar
+    input$times
     layout (matrix(1:6, ncol=3), widths=c(5,5,5), heights=c(8,8))
     op <- par (mar=c(5.2,5,1,1)+0.1,oma=c(1.1,0,0,0))
     Ds <- limitData (data(), input)
