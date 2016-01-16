@@ -6,7 +6,7 @@ RPlot5 <- function (data, Seq=NA) {
     plotWAC (data[, c("Time", DP)], 
                       ylab=expression (paste ("dew point  DPy  [", degree, "C]")), 
                       lty=c(1,1,2,1), lwd=c(2,1.5,1,3), legend.position='bottom', 
-                      col=c('blue', 'red', 'darkgreen', 'black'))
+                      col=c('blue', 'red', 'darkgreen', 'black'), ylim=c(-90,30))
     # pulling legend out of plotWAC to increase font size
     # legend('bottomright',c("DP_DPL", "DP_DPR", "DP_VXL", "ATX"),
     #        col=c("blue","red","darkgreen","black"),
@@ -37,6 +37,9 @@ RPlot5 <- function (data, Seq=NA) {
     if (length (ir) != 1) {
       ir <- which ('DPV_VXL' == DP) ## used in earlier projects
     }
+    if (length (ir) != 1) {
+      ir <- 1
+    }
     colr <- c("blue", "darkgreen", "darkorange", "cyan")
     firstPlot <- TRUE
     i <- 1
@@ -46,9 +49,10 @@ RPlot5 <- function (data, Seq=NA) {
         firstPlot <- FALSE
         plot(data[, c(DP[ir], DPV)], pch=20, col=colr[i], 
              xlab=bquote (.(DP[ir])~'['*degree*C*']'),
-             ylab=expression (paste ("dew point  DPy  [", degree, "C]")))
-        lines (c(-70.,30.), c(-65,35), col="darkorange", lwd=2, lty=2)
-        lines (c(-70.,30.), c(-75,25), col="darkorange", lwd=2, lty=2)
+             ylab=expression (paste ("dew point  DPy  [", degree, "C]")),
+             ylim=c(-90,30))
+        lines (c(-90.,30.), c(-85,35), col="darkorange", lwd=2, lty=2)
+        lines (c(-90.,30.), c(-95,25), col="darkorange", lwd=2, lty=2)
         i <- i + 1
         DPL <- DPV
       } else {

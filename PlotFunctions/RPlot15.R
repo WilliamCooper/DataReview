@@ -1,7 +1,7 @@
 ### plot 15: CN, FSSP, CDP, F300, CONCP, CONC1DC_LWOO
 RPlot15 <- function(data, Seq=NA) {
   layout(matrix(1:2, ncol = 1), widths = 1, heights = c(5,6))
-  if (!is.na(Seq) && (Seq == 1)) {
+  if (is.na(Seq) || (Seq == 1)) {
     op <- par (mar=c(2,4,1,1)+0.1,oma=c(1.1,0,0,0))
     CU <- VRPlot[[15]]
     CU <- CU[which("CONCU" == substr(CU, 1, 5) | "CONCN" == substr(CU, 1, 5))]
@@ -41,7 +41,7 @@ RPlot15 <- function(data, Seq=NA) {
     AddFooter ()
     if (!is.na(Seq) && (Seq == 1)) {return ()}
   }
-  op <- par (mar=c(2,4,1,1)+0.1)
+  op <- par (mar=c(5,4,1,1)+0.1)
   nm6 <- names(data)[grepl("USHFLW_", names(data))]
   if (length(nm6) == 0) {return()}
   USHFLW <- data[, nm6]

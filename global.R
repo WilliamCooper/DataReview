@@ -9,7 +9,7 @@ suppressMessages (suppressWarnings (
   library(Ranadu, quietly=TRUE, warn.conflicts=FALSE))
 )
 
-nplots <- c(1, 3:17, 19:25)    # project default
+nplots <- c(1, 3:17, 19:23)    # project default
 psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
          8,1, 9,1, 9,2, 10,1, 10,2, 11,1, 12,1, 13,1, 14,1, 15,1, 15,2, #22
          16,1, 16,2, 16,3, 17,1, 19,1, 19,2, #28
@@ -131,10 +131,21 @@ savePDF <- function(Data, inp) {
   #### png (file = sprintf ("./Figures/WINTER%s-%%02d.png", Flight))
   print (sprintf ("saving plots to file %s", plotfile))
   DataV <- limitData (Data, inp)
-  t1 <- inp$times[1]
+  t1 <- times[1]
   t <- as.POSIXlt (t1)
   StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
-  DataV <- DataV[(DataV$Time > inp$times[1]) & (DataV$Time < inp$times[2]), ]
+  DataV <- DataV[(DataV$Time > times[1]) & (DataV$Time < times[2]), ]
+  ndv <- names (DataV)
+  ## guard against inf. VCSEL limits
+  if (('DP_VXL' %in% ndv) && all(is.na(DataV$DP_VXL))) {
+    DataV$DP_VXL <- rep(0, nrow(DataV))
+  }
+  if (('DP_DPR' %in% ndv) && all(is.na(DataV$DP_DPR))) {
+    DataV$DP_DPR <- rep(0, nrow(DataV))
+  }
+  if (('DP_DPL' %in% ndv) && all(is.na(DataV$DP_DPL))) {
+    DataV$DP_DPL <- rep(0, nrow(DataV))
+  }
   for (np in 1:30) {
     if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
       if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {
@@ -167,10 +178,10 @@ savePNG <- function(Data, inp) {
                        inp$typeFlight, inp$Flight), width=800, height=800)
   print (sprintf ("saving png plots to subdirectory PNG"))
   DataV <- limitData (Data, inp)
-  t1 <- inp$times[1]
+  t1 <- times[1]
   t <- as.POSIXlt (t1)
   StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
-  DataV <- DataV[(DataV$Time > inp$times[1]) & (DataV$Time < inp$times[2]), ]
+  DataV <- DataV[(DataV$Time > times[1]) & (DataV$Time < times[2]), ]
   for (np in 1:30) {
     if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
       if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {

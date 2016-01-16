@@ -344,7 +344,7 @@ server <- function (input, output, session) {
       if (psq[1, input$plot] %in% c(20:22)) {
         t1 <- times[1]    #input$times[1]
         # print (class(t1))
-        t <- as.POSIXlt (t1)
+        t <- as.POSIXlt (t1, tz='UTC')
         # print (class(t))
         StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
         # print (StartTime)

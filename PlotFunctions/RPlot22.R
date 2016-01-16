@@ -15,8 +15,10 @@ RPlot22 <- function (data, Seq=NA) {
   CellSizes <- ncatt_get (netCDFfile, nm1, "CellSizes")
   CellLimits <- CellSizes$value
   layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(5,5,6))
-  ## yes, I know, bad-practice-reference to calling environment for StartTime
-  ifelse (StartTime > 0, jstart <- getIndex(Time, StartTime), jstart <- 1)
+  idx1 <- getIndex (Time, StartTime)
+  if (idx1 < 1) {idx1 <- 1}
+  ## reference to calling environment for StartTime
+  jstart <- ifelse (StartTime > 0, idx1, 1)
   # print (sprintf ("start time in RPlot23 is %d and jstart is %d\n",
   #                 StartTime, jstart))
   op <- par (mar=c(2,2,1,1)+0.1,oma=c(1.1,0,0,0))

@@ -8,7 +8,7 @@ RPlot9 <- function (data, Seq=NA) {
   # set high transparency (30) to avoid obscuring first trace
   tgreen <- rgb(0,200,0,120,maxColorValue=255)
   cs <- c('blue', tgreen, 'red', 'cyan', 'darkorange', 'violet')
-  if (!is.na (Seq) && (Seq == 1)) {
+  if (is.na (Seq) || (Seq == 1)) {
     WD <- VRPlot[[9]][grepl ('WD', VRPlot[[9]])]
     WS <- VRPlot[[9]][grepl ('WS', VRPlot[[9]])]
     WI <- VRPlot[[9]][grepl ('^WI', VRPlot[[9]])]

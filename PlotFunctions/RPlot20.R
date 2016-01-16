@@ -22,10 +22,11 @@ RPlot20 <- function (data, Seq=NA) {
   time_units <- ncatt_get (netCDFfile, "Time", "units")
   tref <- sub ('seconds since ', '', time_units$value)
   Time <- as.POSIXct(as.POSIXct(tref, tz='UTC')+Time, tz='UTC')
-  
   layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(5,5,6))
-  ## yes, I know, bad-practice-reference to calling environment for StartTime
-  jstart <- ifelse (StartTime > 0, getIndex(Time, StartTime), 1)
+  idx1 <- getIndex (Time, StartTime)
+  if (idx1 < 1) {idx1 <- 1}
+  ## reference to calling environment for StartTime
+  jstart <- ifelse (StartTime > 0, idx1, 1)
   # print (sprintf ("start time in RPlot20 is %d and jstart is %d\n",
   #                 StartTime, jstart))
   op <- par (mar=c(2,2,1,1)+0.1,oma=c(1.1,0,0,0))
