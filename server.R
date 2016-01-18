@@ -457,7 +457,7 @@ server <- function (input, output, session) {
         DB[,V] <- Ds[, nm]
         DB[(Ds$GGALT < zmin) | (Ds$GGALT > zmax), V] <- NA
       }
-      boxplot (DB, horizontal=TRUE, outline=FALSE, 
+      boxplot (DB, horizontal=TRUE, outline=TRUE, 
                xlab=nm, ylab='altitude [km]', names=NULL)
     }
   }, width=920, height=680)

@@ -26,7 +26,7 @@ if (Project == "ORCAS") {
   VRPlot$PV2 <- c("LATC", "LONC", "WDC", "WSC", "GGALT", "PALT", "PSXC")
   VRPlot$PV3 <- c("ATH1", "ATH2", "ATF1", "AT_A")
   VRPlot$PV4 <- c("ATH1", "ATH2", "ATF1", "AT_A")
-  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL", "EW_DPL", "EW_DPR", "EW_VXL", "MR")
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX", "CAVP_DPL", "CAVP_DPR", "EW_DPL", "EW_DPR", "EW_VXL")
   VRPlot$PV6 <- c("PSF", "PS_A", "PSXC")
   VRPlot$PV7 <- c("QCF", "QCR", "QC_A", "QCFC", "QCRC", "TAS_A", "TASF", "TASR", "MACH_A", "MACHF", "MACHR")
   VRPlot$PV8 <- c("PSF", "PS_A", "QCF", "QC_A")
@@ -42,18 +42,18 @@ if (Project == "ORCAS") {
   VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  VRPlot$PV21 <- c("CUHSAS_", "TASX")
-  VRPlot$PV22 <- c("C1DC_", "TASX")
+  VRPlot$PV21 <- "CONCU_"
+  VRPlot$PV22 <- c("CONC1DC_", "C1DC_")
   VRPlot$PV23 <- c(NA)
   VRPlot$PV24 <- c("ATX", "TASX")
   VRPlot$PV25 <- c("ATX", "TASX")
-  VRPlot$PV26 <- c("TASX", "ATX")
+  VRPlot$PV26 <- c("TASX", "ATX", "CONCD_", "GGALT")
   VRPlot$PV27 <- c("TASX", "ATX")
   VRPlot$PV28 <- c("TASX", "ATX")
   VRPlot$PV29 <- c("TASX", "ATX")
   VRPlot$PV30 <- c("TASX", "ATX")
 }
-
+ 
 
 if (Project == "CSET") {
   pitch_offset = 0.18

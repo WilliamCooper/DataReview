@@ -430,7 +430,7 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   chp[[42]] <- CHEM
   chp[[43]] <- sort(FI$Variables)
   chp[[44]] <- sort(FI$Variables)
-  chp[[45]] <- c('TASX', 'ATX')
+  chp[[45]] <- sort(FI$Variables)
   chp[[46]] <- c('TASX', 'ATX')
   chp[[47]] <- c('TASX', 'ATX')
   chp[[48]] <- c('TASX', 'ATX')
