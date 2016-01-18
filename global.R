@@ -286,6 +286,12 @@ SeekManeuvers <- function (Data) {
   print ('end of maneuver list')
 }
 
+seeManual <- function () {
+  if (suppressWarnings(library(rstudio, logical.return=TRUE))) {
+    rstudio::viewer ('DataReviewManual.pdf', height='maximize')
+  }
+}
+
 ## get VRPlot and chp/shp:
 ## load a starting-point version
 Project <- 'ORCAS'

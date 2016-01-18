@@ -68,6 +68,7 @@ server <- function (input, output, session) {
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   observeEvent (input$maneuvers, SeekManeuvers (data ()))
+  observeEvent (input$manual, seeManual ())
   
   observe ({                              ## typeFlight
     if (Trace) {print (sprintf ('entered typeFlight observer with value %s', input$typeFlight))}
