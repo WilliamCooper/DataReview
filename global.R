@@ -9,6 +9,7 @@ suppressMessages (suppressWarnings (
   library(Ranadu, quietly=TRUE, warn.conflicts=FALSE))
 )
 
+Trace <- FALSE
 nplots <- c(1, 3:17, 19:23)    # project default
 psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
          8,1, 9,1, 9,2, 10,1, 10,2, 11,1, 12,1, 13,1, 14,1, 15,1, 15,2, #22
@@ -18,7 +19,11 @@ psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
          24,1, 25,1, 26,1, 27,1, 28,1, 29,1, 30,1) #49
 L <- length (psq)/2
 dim(psq) <- c(2,L)
-netCDFfile <- NA
+netCDFfile <- NULL
+CCDP <- NULL
+CFSSP <- NULL
+CUHSAS <- NULL
+C1DC <- NULL
 
 testPlot <- function (k) {
   return(k %in% nplots || nplots == 0)
@@ -37,7 +42,13 @@ for (P in PJ) {
   } else {
     fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), P, P)
     if (!file.exists (fn)) {
+      fn <- sub ('\\.nc', '.Rdata', fn)
+    }
+    if (!file.exists (fn)) {
       fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), P, P)
+    }
+    if (!file.exists (fn)) {
+      fn <- sub ('\\.nc', '.Rdata', fn)
     }
   }
   if (!file.exists (fn)) {PJ[PJ==P] <- NA}
@@ -63,9 +74,7 @@ for (np in 1:2) {
 }
 for (np in 3:30) {
   if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
-    if (testPlot(np)) {
-      eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
-    }
+    eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
   }
 }
 # functions used later:
@@ -204,11 +213,62 @@ savePNG <- function(Data, inp) {
 
 saveRdata <- function (Data, inp) {
   print ('entered saveRdata')
+  netCDFfile <- nc_open (sprintf ('%s%s/%s%s%02d.nc', DataDirectory (),
+                                  inp$Project, inp$Project, inp$typeFlight,
+                                  inp$Flight))
+  nms <- c('Time', 'TASX')
+  Time <- ncvar_get (netCDFfile, "Time")
+  TASX <- ncvar_get (netCDFfile, "TASX")
+  time_units <- ncatt_get (netCDFfile, "Time", "units")
+  tref <- sub ('seconds since ', '', time_units$value)
+  Time <- as.POSIXct(as.POSIXct(tref, tz='UTC')+Time, tz='UTC')
+  namesCDF <- names (netCDFfile$var)
+  if (length (grep ("CCDP_", namesCDF)) > 0) {
+    nm <- namesCDF[grepl("^CCDP_", namesCDF)]
+    nms <- c(nms, 'CCDP')
+    CCDP <- ncvar_get (netCDFfile, nm)
+    CellSizes <- ncatt_get (netCDFfile, nm, "CellSizes")
+    CellLimitsD <- CellSizes$value
+    attr (CCDP, 'CellLimits') <- CellLimitsD
+  }
+  if (length (grep ("CS100_", namesCDF)) > 0) {
+    nm <- namesCDF[grepl("^CS100_", namesCDF)]
+    nms <- c(nms, 'CS100')
+    CFSSP <- ncvar_get (netCDFfile, nm)
+    CellSizes <- ncatt_get (netCDFfile, nm, "CellSizes")
+    CellLimitsF <- CellSizes$value
+    attr (CFSSP, 'CellLimits') <- CellLimitsF
+  }
+  if (length (grep ("CUHSAS_", namesCDF)) > 0) {
+    nm <- namesCDF[grepl("^CUHSAS_", namesCDF)]
+    nms <- c(nms, 'CUHSAS')
+    CUHSAS <- ncvar_get (netCDFfile, nm)
+    CellSizes <- ncatt_get (netCDFfile, nm, "CellSizes")
+    CellLimitsU <- CellSizes$value
+    attr (CUHSAS, 'CellLimits') <- CellLimitsU
+  }
+  if (length (grep ("CPCASP_", namesCDF)) > 0) {
+    nm <- namesCDF[grepl("^CPCASP_", namesCDF)]
+    nms <- c(nms, 'CPCASP')
+    CUHSAS <- ncvar_get (netCDFfile, nm)
+    CellSizes <- ncatt_get (netCDFfile, nm, "CellSizes")
+    CellLimitsP <- CellSizes$value
+    attr (CUHSAS, 'CellLimits') <- CellLimitsP
+  }
+  if (length (grep ("C1DC_", namesCDF)) > 0) {
+    nm <- namesCDF[grepl("^C1DC_", namesCDF)]
+    nms <- c(nms, 'C1DC')
+    C1DC <- ncvar_get (netCDFfile, nm)
+    CellSizes <- ncatt_get (netCDFfile, nm, "CellSizes")
+    CellLimits <- CellSizes$value
+    attr (C1DC, 'CellLimits') <- CellLimits
+  }
   fn <- sprintf ('%s%s/%s%s%02d.Rdata', DataDirectory (),
                  inp$Project, inp$Project, inp$typeFlight,
                  inp$Flight)
-  save (Data, file=fn)
-  print (sprintf ('saved data.frame to %s', fn))
+  size.distributions <- mget (nms)
+  save (Data, size.distributions, file=fn)
+  print (sprintf ('saved data.frame and size distributions to %s', fn))
 }
 
 SeekManeuvers <- function (Data) {
@@ -245,7 +305,16 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   }
   fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), Project, Project, Flight)
   if (!file.exists (fn)) {
+    if (Trace) {print (sprintf ('%s not found', fn))}
+    fn <- sub ('\\.nc', '.Rdata', fn)
+  }
+  if (!file.exists (fn)) {
+    if (Trace) {print (sprintf ('%s not found', fn))}
     fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
+  }
+  if (!file.exists (fn)) {
+    if (Trace) {print (sprintf ('%s not found', fn))}
+    fn <- sub ('\\.nc', '.Rdata', fn)
   }
   ## if Production load production-file info
   if (Production) {
@@ -261,6 +330,7 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   }
   
   if (!file.exists (fn)) {
+    if (Trace) {print (sprintf ('%s not found', fn))}
     warning ('need tf01 or rf01 to initialize')
     return (VRPlot)
   }
@@ -379,7 +449,13 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
 
 fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
 if (!file.exists (fn)) {
+  fn <- sub ('\\.nc', '.Rdata', fn)
+}
+if (!file.exists (fn)) {
   fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
+}
+if (!file.exists (fn)) {
+  fn <- sub ('\\.nc', '.Rdata', fn)
 }
 if (!file.exists (fn)) {warning ('need tf01 or rf01 to initialize')}
 FI <- DataFileInfo (fn)

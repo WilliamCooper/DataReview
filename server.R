@@ -1,25 +1,14 @@
 
 server <- function (input, output, session) {
-
+  
   ## if this is set TRUE then messages will print in the console
   ## indicating which functions are entered, to trace the sequence
   ## of interactions when window entries are changed.
   Trace <- FALSE
-
-  output$ui2 <- renderUI ({
-    #     print (sprintf ('entered ui2 with plot %d', input$plot))
-    #     print (chp[[input$plot]]);print (slp[[input$plot]])
-    if (Trace) {print (sprintf ('entered ui2 with plot %d', input$plot))}
-    if (input$addVar != 'add var') {
-      chp[[input$plot]] <<- c(chp[[input$plot]],input$addVar)
-    }
-    PVar <<- slp[[input$plot]]
-    updateSelectInput (session, 'addVar', selected='add var')
-    selectInput ('PlotVar', label='variables', selectize=FALSE, multiple=TRUE,
-                 choices=chp[[input$plot]], selected=slp[[input$plot]], size=10)
-  })
-
-  observe ({
+  
+  ################ OBSERVERS ########################
+  
+  observe ({                              ## PlotVar
     if (Trace) {
       print ('entered observe for PlotVar')
       print (sprintf ('PVar is %s', PVar))
@@ -44,27 +33,12 @@ server <- function (input, output, session) {
     if (Trace) {
       print (sprintf ('redefined global VRPlot[[%d]]', jp))
       print (PVar)
-      reac$newdisplay <- TRUE
     }
+    # reac$newdisplay <- TRUE
     VRPlot[[jp]] <<- PVar
   }, priority=-5)
-
-  #   st <- c('track', 'track',
-  #           'temperature', 'temperature',
-  #           rep('humidity', 4),
-  #           rep('pressure', 4),
-  #           rep('wind', 7),
-  #           'radiation',
-  #           rep('particles', 5),
-  #           'skew-T',
-  #           rep('potential T',2),
-  #           rep('CDP',4),
-  #           rep('UHSAS/PCASP',4),
-  #           rep('2DC', 4),
-  #           rep('air chemistry',2),
-  #           rep('extras',2))
-
-  observe({
+  
+  observe({                             ## Rplot
     vp <- switch (input$Rplot,
                   'track' = 1,
                   'temperature' = 3,
@@ -83,10 +57,8 @@ server <- function (input, output, session) {
     )
     updateNumericInput (session, 'plot', value=vp)
   })
-
-  reac <- reactiveValues (newdata=FALSE, newdisplay=FALSE)
-
-  observeEvent (input$reconfigure, saveConfig (), handler.env=.GlobalEnv)
+  
+  observeEvent (input$reconfigure, saveConfig ())
   observeEvent (input$savePDF,
                 savePDF (Data=data(), inp=input))
   observeEvent (input$savePNG,
@@ -96,33 +68,28 @@ server <- function (input, output, session) {
   observeEvent (input$ncplot, OpenInProgram (data(), warnOverwrite=FALSE))
   observeEvent (input$Xanadu, OpenInProgram (data(), 'Xanadu', warnOverwrite=FALSE))
   observeEvent (input$maneuvers, SeekManeuvers (data ()))
-
-  flightType <- reactive ({
-    ## reset typeFlight to rf
-    updateRadioButtons (session, 'typeFlight', label=NULL, selected='rf')
-#     FC <- file.choose()
-#     print (FC)
-    'rf'
-  })
-
-  observe ({
+  
+  observe ({                              ## typeFlight
     if (Trace) {print (sprintf ('entered typeFlight observer with value %s', input$typeFlight))}
     typeFlight <<- input$typeFlight
     reac$newdata <- TRUE
   })
-
-  observe ({
+  
+  observe ({                              ## VRP
     if (Trace) {print (sprintf ('entered VRP, Project=%s %s',
                                 input$Project, Project))}
     if (input$Project != Project) {
       Project <<- Project <- input$Project
       if (Trace) {print (sprintf ('set new project: %s', Project))}
       typeFlight <<- flightType ()
-
+      
       if (grepl ('HIPPO', Project)) {
         fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), Project)
       } else {
         fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
+      }
+      if (!file.exists (fn)) {
+        fn <- sub ('\\.nc', '.Rdata', fn)
       }
       if (!file.exists (fn)) {
         if (grepl ('HIPPO', Project)) {
@@ -130,6 +97,9 @@ server <- function (input, output, session) {
         } else {
           fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
         }
+      }
+      if (!file.exists (fn)) {
+        fn <- sub ('\\.nc', '.Rdata', fn)
       }
       if (!file.exists (fn)) {
         warning ('need tf01 or rf01 to initialize')
@@ -140,15 +110,57 @@ server <- function (input, output, session) {
       VRPlot <<- loadVRPlot (Project, FALSE, 1, psq)
     }
   }, priority=10)
-
-  data <- reactive({
+  
+  observe ({                             ## time
+    if (Trace) {print ('setting time')}
+    if (Trace) {print (sprintf ('Project and Flight: %s %s%02d',
+                                isolate(input$Project),
+                                isolate (input$typeFlight),
+                                isolate (input$Flight)))}
+    #     reac$newdisplay
+    #     reac$newdisplay <- TRUE
+    Data <- data ()
+    if (length (Data) < 2) {
+      reac$newdata <- TRUE
+      if (Trace) {print ('error, need data first')}
+      return ()
+    }
+    step <- 60
+    minT <- Data$Time[1]
+    minT <- minT - as.integer (minT) %% step
+    maxT <- Data$Time[nrow(Data)]
+    maxT <- maxT - as.integer (maxT) %% step + step
+    if (Trace) {print (sprintf ('slider values %s %s', formatTime (minT),
+                                formatTime (maxT)))}
+    updateSliderInput(session, inputId='times', label=NULL,
+                      value=c(minT, maxT),
+                      min=minT, max=maxT)
+    times <<- c(minT, maxT)
+  }, priority=0)
+  
+  
+  observe ({                          ## global time
+    if (Trace) {print ('entering global-time observer')}
+    times <<- input$times
+  })
+  
+  ################ REACTIVES ########################
+  
+  reac <- reactiveValues (newdata=FALSE, newdisplay=FALSE)
+  
+  flightType <- reactive ({              ## typeFlight
+    ## reset typeFlight to rf
+    updateRadioButtons (session, 'typeFlight', label=NULL, selected='rf')
+    'rf'
+  })
+  
+  data <- reactive({                     ## data
     if (Trace) {print ('entered data')}
     # Project <<- Project <- input$Project
     reac$newdata
     reac$newdata <- FALSE
     VarList <- vector()
     # VRPlot <- VRP ()
-    if (Trace) {print (VRPlot$PV3)}
     for (i in 1:length(VRPlot)) {
       for (j in 1:length (VRPlot[[i]])) {
         VarList <- c(VarList, VRPlot[[i]][j])
@@ -166,30 +178,23 @@ server <- function (input, output, session) {
       fname <<- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project,
                          input$Project, typeFlight, input$Flight)
     }
-#     if (input$Production) {
-#       print (sprintf ('Production section, input$Production=%d', input$Production))
-#       dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
-#       scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
-#                        dr, Project, input$typeFlight, input$Flight)
-#       fl <- system (scmd, intern=TRUE)[1]
-#       if ((length (fl) > 0) && (!grepl ('total', fl))) {
-#         fname <- sub ('.* /', '/', fl[1])
-#       }
-#       scmd <- sub ('\\.nc', '.Rdata', scmd)
-#       fl <- system (scmd, intern=TRUE)[1]
-#       if ((length (fl) > 0) && (!grepl ('total', fl))) {
-#         fname <- sub ('.* /', '/', fl[1])
-#       }
-#     }
+    #     if (input$Production) {
+    #       print (sprintf ('Production section, input$Production=%d', input$Production))
+    #       dr <- sprintf ('%s../raf/Prod_Data/%s', DataDirectory (), Project)
+    #       scmd <- sprintf ('ls -lt `/bin/find %s -ipath "\\./movies" -prune -o -ipath "\\./*image*" -prune -o -name %s%s%02d.nc`',
+    #                        dr, Project, input$typeFlight, input$Flight)
+    #       fl <- system (scmd, intern=TRUE)[1]
+    #       if ((length (fl) > 0) && (!grepl ('total', fl))) {
+    #         fname <- sub ('.* /', '/', fl[1])
+    #       }
+    #       scmd <- sub ('\\.nc', '.Rdata', scmd)
+    #       fl <- system (scmd, intern=TRUE)[1]
+    #       if ((length (fl) > 0) && (!grepl ('total', fl))) {
+    #         fname <- sub ('.* /', '/', fl[1])
+    #       }
+    #     }
     if (Trace) {print (sprintf ('in data, fname=%s', fname))}
-    fnRdata <- sub ('\\.nc', '.Rdata', fname)
-    if (file.exists (fnRdata)) {
-      print ('using Rdata file')
-      fl <- load (file=fnRdata)
-      FI <<- DataFileInfo (fnRdata)
-      loadVRPlot (Project, input$Production, input$Flight, psq)
-      return (Data)
-    }
+    reac$newdisplay <- TRUE
     if (file.exists(fname)) {
       D <- getNetCDF (fname, VarList)
       if (length (D) > 1) {
@@ -203,7 +208,16 @@ server <- function (input, output, session) {
       }
     } else {
       warning (sprintf ('the file %s does not exist', fname))
-
+      fnRdata <- sub ('\\.nc', '.Rdata', fname)
+      if (file.exists (fnRdata)) {
+        warning ('using Rdata file instead')
+        fl <- load (file=fnRdata)
+        FI <<- DataFileInfo (fnRdata)
+        loadVRPlot (Project, Production=FALSE, input$Flight, psq)
+        fname.last <<- fname
+        # print (sprintf ('data returned with dimensions %d', dim(Data)))
+        return (Data)
+      }
       ## try tf01
       fn <- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project,
                      input$Project, 'tf', input$Flight)
@@ -219,8 +233,10 @@ server <- function (input, output, session) {
       }
     }
   })
-
-
+  
+  
+  ################ OUTPUTS ########################
+  
   output$M1 <- renderText ({
     switch (psq[1, input$plot],
             'Track Plot and z-t',
@@ -250,40 +266,21 @@ server <- function (input, output, session) {
             'extra'
     )
   })
-
-  observe ({
-    if (Trace) {print ('setting time')}
-    if (Trace) {print (sprintf ('Project and Flight: %s %s%02d',
-                                isolate(input$Project),
-                                isolate (input$typeFlight),
-                                isolate (input$Flight)))}
-#     reac$newdisplay
-#     reac$newdisplay <- TRUE
-    step <- 60
-    if (length (data ()) < 2) {
-      reac$newdata <- TRUE
-      if (Trace) {print ('error, need data first')}
-      return ()
+  
+  output$ui2 <- renderUI ({
+    #     print (sprintf ('entered ui2 with plot %d', input$plot))
+    #     print (chp[[input$plot]]);print (slp[[input$plot]])
+    if (Trace) {print (sprintf ('entered ui2 with plot %d', input$plot))}
+    if (input$addVar != 'add var') {
+      chp[[input$plot]] <<- c(chp[[input$plot]],input$addVar)
     }
-    minT <- data()$Time[1]
-    minT <- minT - as.integer (minT) %% step
-    maxT <- data()$Time[nrow(data())]
-    maxT <- maxT - as.integer (maxT) %% step + step
-    if (Trace) {print (sprintf ('slider values %s %s', formatTime (minT),
-                                formatTime (maxT)))}
-    updateSliderInput(session, inputId='times', label=NULL,
-                value=c(minT, maxT),
-                min=minT, max=maxT)
-    times <<- c(minT, maxT)
-  }, priority=0)
-  
-  
-  observe ({
-    if (Trace) {print ('entering global-time observer')}
-    times <<- input$times
+    PVar <<- slp[[input$plot]]
+    updateSelectInput (session, 'addVar', selected='add var')
+    selectInput ('PlotVar', label='variables', selectize=FALSE, multiple=TRUE,
+                 choices=chp[[input$plot]], selected=slp[[input$plot]], size=10)
   })
-
-  output$display <- renderPlot ({
+  
+  output$display <- renderPlot ({  ## display
     # input$typeFlight
     if (is.null(input$times[1])) {
       if (Trace) {print ('in display but input time is NULL')}
@@ -306,10 +303,10 @@ server <- function (input, output, session) {
         text (0.5, 0.8, sprintf ('requested data file (%s) not found', fname))
         return ()
       }
-
+      
       if (Trace) {
         print (sprintf ('input$times %s %s', formatTime (input$times[1]),
-                      formatTime (input$times[2])))
+                        formatTime (input$times[2])))
         print (sprintf ('global times are %s %s',
                         formatTime (times[1]), formatTime (times[2])))
       }
@@ -381,7 +378,7 @@ server <- function (input, output, session) {
       if (Trace) {print ('finished display')}
     }
   }, width=920, height=680)
-
+  
   output$stats <- renderDataTable ({
     if (Trace) {print ('entered stats')}
     input$times
@@ -432,7 +429,7 @@ server <- function (input, output, session) {
             ylab='probability density', main=NA)
     }
   }, width=920, height=680)
-
+  
   output$barWvsZ <- renderPlot ({
     if (Trace) {print ('entered barXvsZ')}
     input$PlotVar
@@ -471,7 +468,7 @@ server <- function (input, output, session) {
     Ds <- Ds[(Ds$Time > times[1]) & (Ds$Time < times[2]), ]
     Ds
   }, options=list(paging=TRUE, searching=TRUE))
-
+  
   outputOptions (output, 'display', priority=-10)
   outputOptions (output, 'stats', priority=-10)
   outputOptions (output, 'listing', priority=-10)

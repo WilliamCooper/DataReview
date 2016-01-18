@@ -3,38 +3,56 @@ RPlot21 <- function (data, Seq=NA) {
   ## needs CUHSAS_RWOOU, CPCASP_RWOOP; references fname from calling environment
   if (is.na (VRPlot$PV21) || (length(VRPlot$PV21) < 1)) {return ()}
   kount = 0
-  if (length(netCDFfile) <= 1) {netCDFfile <- nc_open (fname)}
   plotTest <- 50
-  namesCDF <- names (netCDFfile$var)
-  V <- VRPlot$PV21[1]
-  if (substr(V, nchar(V), nchar(V)) == '_') {
-    nm1 <- namesCDF[grepl(VRPlot$PV21[1], namesCDF)]
-  } else {
-    nm1 <- V
-  }
   AddPCASP <- FALSE
-  if (length(VRPlot$PV21) > 2) {
-    AddPCASP <- TRUE
-    V <- VRPlot$PV21[2]
+  if (!is.na (fname) && file.exists (fname)) {
+    netCDFfile <- nc_open (fname)
+    namesCDF <- names (netCDFfile$var)
+    V <- VRPlot$PV21[1]
     if (substr(V, nchar(V), nchar(V)) == '_') {
-      nm2 <- namesCDF[grepl(VRPlot$PV21[2], namesCDF)]
+      nm1 <- namesCDF[grepl(VRPlot$PV21[1], namesCDF)]
     } else {
-      nm2 <- V
+      nm1 <- V
     }
-  }
-  if (length (nm1) > 1) {nm1 <- nm1[1]}  ## multiple (e.g., for CVI): choose 1st
-  Time <- ncvar_get (netCDFfile, "Time")
-  TASX <- ncvar_get (netCDFfile, "TASX")
-  CUHSAS <- ncvar_get (netCDFfile, nm1)
-  if (AddPCASP) {CPCASP <- ncvar_get (netCDFfile, nm2)}
-  time_units <- ncatt_get (netCDFfile, "Time", "units")
-  tref <- sub ('seconds since ', '', time_units$value)
-  Time <- as.POSIXct(as.POSIXct(tref, tz='UTC')+Time, tz='UTC')
-  CellSizes <- ncatt_get (netCDFfile, nm1, "CellSizes")
-  CellLimitsU <- CellSizes$value
-  if (AddPCASP) {
-    CellSizes <- ncatt_get (netCDFfile, nm2, "CellSizes")
-    CellLimitsP <- CellSizes$value
+    if (length(VRPlot$PV21) > 2) {
+      AddPCASP <- TRUE
+      V <- VRPlot$PV21[2]
+      if (substr(V, nchar(V), nchar(V)) == '_') {
+        nm2 <- namesCDF[grepl(VRPlot$PV21[2], namesCDF)]
+      } else {
+        nm2 <- V
+      }
+    }
+    if (length (nm1) > 1) {nm1 <- nm1[1]}  ## multiple (e.g., for CVI): choose 1st
+    Time <- ncvar_get (netCDFfile, "Time")
+    TASX <- ncvar_get (netCDFfile, "TASX")
+    CUHSAS <- ncvar_get (netCDFfile, nm1)
+    if (AddPCASP) {CPCASP <- ncvar_get (netCDFfile, nm2)}
+    time_units <- ncatt_get (netCDFfile, "Time", "units")
+    tref <- sub ('seconds since ', '', time_units$value)
+    Time <- as.POSIXct(as.POSIXct(tref, tz='UTC')+Time, tz='UTC')
+    CellSizes <- ncatt_get (netCDFfile, nm1, "CellSizes")
+    CellLimitsU <- CellSizes$value
+    if (AddPCASP) {
+      CellSizes <- ncatt_get (netCDFfile, nm2, "CellSizes")
+      CellLimitsP <- CellSizes$value
+    }
+  } else {
+    fn <- sub ('\\.nc', '.Rdata', fname)
+    if (file.exists (fn)) {
+      load (file=fn)
+      Time <- size.distributions$Time
+      TASX <- size.distributions$TASX
+      if ('CUHSAS' %in% names (size.distributions)) {
+        CUHSAS <- size.distributions$CUHSAS
+        CellLimitsU <- attr (CUHSAS, 'CellLimits')
+      }
+      if ('CPCASP' %in% names (size.distributions)) {
+        AddPCASP <- TRUE
+        CPCASP <- size.distributions$CPCASP
+        CellLimitsP <- attr (CPCASP, 'CellLimits')
+      }
+    }
   }
   layout(matrix(1:6, ncol = 2), widths = c(5,5), heights = c(5,5,6))
   op <- par (mar=c(2,2,1,1)+0.1,oma=c(1.1,0,0,0))
@@ -83,9 +101,7 @@ RPlot21 <- function (data, Seq=NA) {
     if (kount >= 24) {break}
   }
   if (is.na(Seq) || (Seq == 4)) {
-    Z <- nc_close (netCDFfile)
-    netCDFfile <<- NA
+    if (!is.na (fname) && file.exists (fname)) {Z <- nc_close (netCDFfile)}
   }
-  # Z <- nc_close (netCDFfile)
 }
 

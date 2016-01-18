@@ -55,7 +55,7 @@ RPlot7 <- function (data, Seq=NA) {
   TAS <- TAS[which("TAS" == substr(TAS, 1, 3))]
   plotWAC (data[, c("Time", TAS)], 
            col=c('blue', 'darkorange', 'darkgreen', 'cyan'), ylab='TASy [m/s]', 
-           legend.position='top')
+           legend.position='bottom')
   points(data$Time, (data[, TAS[length(TAS)]] - data[, TAS[1]]) *20+200, type='l',
          col='red')  
   ltext <- sprintf("red: (%s-%s)*20+200", TAS[length(TAS)], TAS[1])
@@ -74,6 +74,6 @@ RPlot7 <- function (data, Seq=NA) {
   MACH <- MACH[which("MACH" == substr(MACH, 1, 4))]
   plotWAC (data[, c("Time", MACH)], 
            col=c('blue', 'darkorange', 'darkgreen'), ylab='MACHy', 
-           legend.position='top')
+           legend.position='bottom')
   AddFooter ()
 }
