@@ -42,8 +42,8 @@ if (Project == "ORCAS") {
   VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  VRPlot$PV21 <- "CONCU_"
-  VRPlot$PV22 <- c("CONC1DC_", "C1DC_")
+  VRPlot$PV21 <- "CUHSAS_"
+  VRPlot$PV22 <- c("C1DC_", "CONC1DC_")
   VRPlot$PV23 <- c(NA)
   VRPlot$PV24 <- c("ATX", "TASX")
   VRPlot$PV25 <- c("ATX", "TASX")
