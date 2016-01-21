@@ -42,7 +42,7 @@ if (Project == "ORCAS") {
   VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  VRPlot$PV21 <- "CUHSAS_"
+  VRPlot$PV21 <- c("CUHSAS_", 'TASX')
   VRPlot$PV22 <- c("C1DC_", "CONC1DC_")
   VRPlot$PV23 <- c(NA)
   VRPlot$PV24 <- c("ATX", "TASX")
@@ -1089,7 +1089,7 @@ if (Project == "DC3-TEST") {
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV22 <- c("CUHSAS_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_", "TASX")
   ## plot sample of 2DC size distributions
   VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")
