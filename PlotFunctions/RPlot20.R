@@ -4,11 +4,13 @@ RPlot20 <- function (data, Seq=NA) {
   ## needs CCDP_LWOI; references fname from calling environment
   kount = 0
   if (!is.na (fname) && file.exists (fname)) {
-    if (is.null (netCDFfile)) {netCDFfile <- nc_open (fname)}
+    if (is.null (netCDFfile) || is.na (netCDFfile)) {
+      netCDFfile <- nc_open (fname)
+    }
     namesCDF <- names (netCDFfile$var)
     if (length (grep ("CCDP_", VRPlot[[20]])) > 0) {
       nm1 <- namesCDF[grepl("CCDP_", namesCDF)]
-      if (is.null (CCDP)) {
+      if (is.null (CCDP) || (is.na (CCDP))) {
         CCDP <- ncvar_get (netCDFfile, nm1)
         CellSizes <- ncatt_get (netCDFfile, nm1, "CellSizes")
         CellLimitsD <- CellSizes$value

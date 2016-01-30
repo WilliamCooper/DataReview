@@ -4,7 +4,7 @@
 ## cd ~/RStudio/DataReview
 ## Rscript Review.R  #defaults to next pdf-plot and all times
 ## --or--
-## Rscript 5 150000 200000  #to specify rf05 and 15:00:00 to 20:00:00
+## Rscript Review.R 5 150000 200000  #to specify rf05 and 15:00:00 to 20:00:00
 
 suppressMessages (
   library(shiny, quietly=TRUE, warn.conflicts=FALSE)
@@ -45,6 +45,7 @@ psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
 L <- length (psq)/2
 dim(psq) <- c(2,L)
 netCDFfile <- NA
+CCDP <- NA
 
 testPlot <- function (k) {
   return(k %in% nplots || nplots == 0)
@@ -456,8 +457,8 @@ Data <- getNetCDF (fname, VarList, STime, ETime, F=Flight)
 Dt <- Data[!is.na (Data$Time), 'Time']
 i1 <- getIndex (Dt, STime)
 i2 <- getIndex (Dt, ETime)
-if (length(i1) == 0 || i1 == 0) {i1 <- 1}
-if (length(i2) == 0 || i2 == 0) {i2 <- length(Dt)}
+if (length(i1) == 0 || i1 <= 0) {i1 <- 1}
+if (length(i2) == 0 || i2 <= 0) {i2 <- length(Dt)}
 inp$times <- c(Dt[i1], Dt[i2])
 
 SE <- getStartEnd (Data$Time)
