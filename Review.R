@@ -90,13 +90,13 @@ SmoothInterp <- function (x) {
 ## make plot functions available
 for (np in 1:2) {
   if (testPlot(np)) {
-    eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
+    eval(parse(text=sprintf("source(\"~/RStudio/DataReview/PlotFunctions/RPlot%d.R\")", np)))
   }
 }
 for (np in 3:30) {
-  if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
+  if (file.exists (sprintf ("~/RStudio/DataReview/PlotFunctions/RPlot%d.R", np))) {
     if (testPlot(np)) {
-      eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
+      eval(parse(text=sprintf("source(\"~/RStudio/DataReview/PlotFunctions/RPlot%d.R\")", np)))
     }
   }
 }
@@ -168,7 +168,7 @@ savePDF <- function(Data, inp) {
   StartTime <<- as.integer (10000*t$hour+100*t$min+t$sec)
   DataV <- DataV[(DataV$Time > inp$times[1]) & (DataV$Time < inp$times[2]), ]
   for (np in 1:30) {
-    if (file.exists (sprintf ("./PlotFunctions/RPlot%d.R", np))) {
+    if (file.exists (sprintf ("~/RStudio/DataReview/PlotFunctions/RPlot%d.R", np))) {
       if (testPlot(np) && (length(VRPlot[[np]]) > 0)) {
         print(paste('Plot',np))
         ## eval(parse(text=sprintf("source(\"PlotFunctions/RPlot%d.R\")", np)))
@@ -233,11 +233,11 @@ saveRdata <- function (Data, inp) {
 }
 
 SeekManeuvers <- function (Data) {
-  source ("./PlotFunctions/SpeedRunSearch.R")
-  source ("./PlotFunctions/CircleSearch.R")
-  source ("./PlotFunctions/PitchSearch.R")
-  source ("./PlotFunctions/YawSearch.R")
-  source ("./PlotFunctions/ReverseHeadingSearch.R")
+  source ("~/RStudio/DataReview/PlotFunctions/SpeedRunSearch.R")
+  source ("~/RStudio/DataReview/PlotFunctions/CircleSearch.R")
+  source ("~/RStudio/DataReview/PlotFunctions/PitchSearch.R")
+  source ("~/RStudio/DataReview/PlotFunctions/YawSearch.R")
+  source ("~/RStudio/DataReview/PlotFunctions/ReverseHeadingSearch.R")
   print ('list of maneuvers:')
   PitchSearch (Data)
   YawSearch (Data)
@@ -250,7 +250,7 @@ SeekManeuvers <- function (Data) {
 ## get VRPlot and chp/shp:
 ## load a starting-point version
 loadVRPlot <- function (Project, Production, Flight, psq) {
-  source ('Configuration.R')
+  source ('~/RStudio/DataReview/Configuration.R')
   # print (sprintf ('in loadVRPlot, Project=%s', Project))
   # print (VRPlot)
   # print (str(VRPlot))
