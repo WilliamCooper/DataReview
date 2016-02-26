@@ -452,13 +452,19 @@ for (i in 1:length(VRPlot)) {
 }
 VarList <- unique (VarList)
 VarList <- VarList[!is.na(VarList)]
-Data <- getNetCDF (fname, VarList, STime, ETime, F=Flight)
+Data <- getNetCDF (fname, VarList, F=Flight)
+
 ## protect against NAs
 Dt <- Data[!is.na (Data$Time), 'Time']
-i1 <- getIndex (Dt, STime)
-i2 <- getIndex (Dt, ETime)
-if (length(i1) == 0 || i1 <= 0) {i1 <- 1}
-if (length(i2) == 0 || i2 <= 0) {i2 <- length(Dt)}
+if (STime != 0 || ETime != 0) {
+  i1 <- getIndex (Dt, STime)
+  i2 <- getIndex (Dt, ETime)
+  if (length(i1) == 0 || i1 <= 0) {i1 <- 1}
+  if (length(i2) == 0 || i2 <= 0) {i2 <- length(Dt)}
+} else {
+  i1 <- 1
+  i2 <- nrow (Data)
+}
 inp$times <- c(Dt[i1], Dt[i2])
 
 SE <- getStartEnd (Data$Time)
