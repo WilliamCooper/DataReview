@@ -35,8 +35,10 @@ RPlot16 <- function (data, Seq=NA) {
       data[, v] <- SmoothInterp(data[, nm])
       va <- c(va, v)
     }
-    plotWAC(data[, c("Time", va)], ylim=c(0,30), ylab="DBAR", legend.position="topright")
-    title ("1-min filter", cex.main=0.75) 
+    if (length (va) > 0) {
+      plotWAC(data[, c("Time", va)], ylim=c(0,30), ylab="DBAR", legend.position="topright")
+      title ("1-min filter", cex.main=0.75) 
+    }
     op <- par (mar=c(5,4,1,1)+0.1)
     if (any(grepl("DBAR1DC_", VRPlot[[16]]))) {
       nm <- names(data)[grepl("DBAR1DC_", names(data))]

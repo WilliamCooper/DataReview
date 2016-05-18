@@ -492,7 +492,7 @@ if (Project == "PACDEX") {
   VRPlot$PV18 <- c("PSXC", "ATX", "DPXC", "GGALT")
   VRPlot$PV19 <- c("THETA", "THETAV", "THETAE", "THETAP", "THETAQ", "PSXC", "ATX", "PSXC", "EWX")
   VRPlot$PV20 <- c("CCDP_", "TASX")
-  VRPlot$PV21 <- NA
+  VRPlot$PV21 <- c("CUHSAS_RWI")
   VRPlot$PV22 <- c("C1DC_", "TASX")
   VRPlot$PV23 <- NA
   VRPlot$PV24 <- c("TASX", "ATX")
@@ -523,7 +523,8 @@ if (Project == "START08") {
   ## first is reference for comparisons
   VRPlot$PV4 <- VRPlot$PV3
   ## the next line should end with ATX and list dewpoints
-  VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
+  # VRPlot$PV5 <- c("DPV_VXL", "DP_DPL", "DP_DPR", "ATX")
+  VRPlot$PV5 <- c("DP_VXL", "DP_DPL", "DP_DPR", "ATX")
   ## don't use if CAVP not available:
   # not available, PREDICT: VRPlot$PV5 <- c(VRPlot$PV5, "CAVP_DPL", "CAVP_DPR", "PSXC", "LSRINT_VXL")
   ## use only if CAVP not available: will plot surrogate CAVP
@@ -882,7 +883,7 @@ if (Project == "HIPPO-4" || Project == "HIPPO-5") {
   ## RPlot2: uses same variables as RPlot1
   VRPlot[[2]] <- VRPlot[[1]]
   ## RPlot3: T vs time, specify any number of temperatures
-  VRPlot$PV3 <- c("ATH1", "ATH2", "ATH3", "ATH4", "AT_A")
+  VRPlot$PV3 <- c("ATH1", "ATH2", "ATX", "ATH4", "AT_A")
   ## RPlot4: compare temperatures in pairs; specify up to five.
   ## first is reference for comparisons
   VRPlot$PV4 <- VRPlot$PV3
@@ -1015,7 +1016,7 @@ if (Project == "PREDICT") {
   ## plot sample of CDP size distributions
   VRPlot$PV20 <- c("CCDP_", "TASX")
   ## plot sample of UHSAS size distributions; include PCASP if present (not HIPPO-2)
-  VRPlot$PV21 <- c("CUHSAS_LMO", "CS200_", "TASX")
+  VRPlot$PV21 <- c("CUHSAS_LMO", "CS200_OPC", "TASX")
   ## plot sample of 2DC size distributions
   VRPlot$PV22 <- c("C1DC_", "TASX")
   # VRPlot$PV30 <- c("CORAW_AL", "FO3_ACD", "COFLOW_AL", "INLETP_AL")

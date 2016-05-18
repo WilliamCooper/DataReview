@@ -14,7 +14,7 @@ RPlot21 <- function (data, Seq=NA) {
     } else {
       nm1 <- V
     }
-    if (length(VRPlot$PV21) > 2) {
+    if (any (grepl('CS200', namesCDF))) {
       AddPCASP <- TRUE
       V <- VRPlot$PV21[2]
       if (substr(V, nchar(V), nchar(V)) == '_') {
@@ -62,19 +62,22 @@ RPlot21 <- function (data, Seq=NA) {
   jstart <- ifelse (StartTime > 0, idx1, 1)
   # print (sprintf ("start time in RPlot21 is %d and jstart is %d\n",
   #                 StartTime, jstart))
-  
   for (j in jstart:length(Time)) {
     if (is.na(Time[j])) {next}
     if (!is.na(TASX[j]) && (TASX[j] < 90)) {next}
     UHSAS <- CUHSAS[, j]
     if (AddPCASP) {PCASP <- CPCASP[, j]}
     ## convert distributions to number per cm per um
-    for (m in 2:length(UHSAS)) {
-      UHSAS[m] <- UHSAS[m] / (CellLimitsU[m] - CellLimitsU[m-1])
+    if (any(!is.na(UHSAS))) {
+      for (m in 2:length(UHSAS)) {
+        UHSAS[m] <- UHSAS[m] / (CellLimitsU[m] - CellLimitsU[m-1])
+      }
     }
     if (AddPCASP) {
-      for (m in 2:length(PCASP)) {
-        PCASP[m] <- PCASP[m] / (CellLimitsP[m] - CellLimitsP[m-1])
+      if (any (!is.na(PCASP))) {
+        for (m in 2:length(PCASP)) {
+          PCASP[m] <- PCASP[m] / (CellLimitsP[m] - CellLimitsP[m-1])
+        }
       }
     }
     
@@ -85,10 +88,17 @@ RPlot21 <- function (data, Seq=NA) {
       if (is.na (Seq) || (!is.na(Seq) && (kount > (Seq-1)*6))) {
         ifelse ((kount %% 3), op <- par (mar=c(2,2,1,1)+0.1),
                 op <- par (mar=c(5.2,2,1,1)+0.1))
-        plot (CellLimitsU, UHSAS, type='s', ylim=c(1,1.e6), 
-              xlab="Diameter [um]", log="y", col='blue', lwd=2)
-        if (AddPCASP) {
-          points (CellLimitsP, PCASP, type='s', col='darkgreen')
+        if (any (!is.na(UHSAS))) {
+          plot (CellLimitsU, UHSAS, type='s', ylim=c(1,1.e6),
+                xlab="Diameter [um]", log="y", col='blue', lwd=2)
+        } 
+        if (AddPCASP && any (!is.na (PCASP))) {
+          if (any (!is.na(UHSAS))) {
+            points (CellLimitsP, PCASP, type='s', col='darkgreen')
+          } else {
+            plot (CellLimitsP, PCASP, type='s', ylim=c(1,1.e6),
+                  xlab='Diameter [um]', log='y', col='darkgreen', lwd=2)
+          }
         }
         title(sprintf("size distribution, Time=%s", strftime (Time[j], format="%H:%M:%S", tz='UTC')), 
               cex.main=.75)

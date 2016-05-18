@@ -10,6 +10,7 @@ suppressMessages (suppressWarnings (
 )
 
 Trace <- FALSE
+Trace <- TRUE
 nplots <- c(1, 3:17, 19:23)    # project default
 psq <- c(1,1, 1,2, 3,1, 4,1, 5,1, 5,2, 5,3, 5,4, 6,1, 7,1, 7,2,  #11
          8,1, 9,1, 9,2, 10,1, 10,2, 11,1, 12,1, 13,1, 14,1, 15,1, 15,2, #22
@@ -93,12 +94,13 @@ saveConfig <- function() {
   file.copy('Configuration.R','Configuration.R.backup', overwrite=TRUE)
   lines <- readLines ('Configuration.R')
   unlink ('Configuration.R')
-  startLine <- which (grepl (sprintf ('%s', Project), lines))
+  startLine <- which (grepl (sprintf ('Project == "%s"', Project), lines))
   endLine <- which (grepl ('Project', lines[(startLine+1):length(lines)]))[1]
   if (is.na(endLine)) {
     endLine <- length (lines)
   } else {
     endLine <- endLine + startLine - 1
+    # print (sprintf ('start and end lines are %d %d', startLine, endLine))
   }
   linesOut <- lines[1:startLine]
   while (grepl ('offset',lines[startLine+1])) {
@@ -309,7 +311,13 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
     }
     names(VRPlot) <- nm
   }
-  fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), Project, Project, Flight)
+  if (grepl ('HIPPO', Project)) {
+    ProjectDir <- 'HIPPO'
+  } else {
+    ProjectDir <- Project
+  }
+  
+  fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), ProjectDir, Project, Flight)
   if (!file.exists (fn)) {
     if (Trace) {print (sprintf ('%s not found', fn))}
     fn <- sub ('\\.nc', '.Rdata', fn)
@@ -417,8 +425,8 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   chp[[30]] <- chp[[29]]
   chp[[31]] <- chp[[29]]
   chp[[32]] <- chp[[29]]
-  chp[[33]] <- FI$Variables[grepl ("CUHSAS_", FI$Variables)
-                            | grepl ('CS200_', FI$Variables)]
+  chp[[33]] <- FI$Variables[grepl ("CUHSAS_", FI$Variables)]
+  chp[[33]] <- c(chp[[33]], FI$Variables[grepl ('CS200_', FI$Variables)])
   chp[[34]] <- chp[[33]]
   chp[[35]] <- chp[[33]]
   chp[[36]] <- chp[[33]]
