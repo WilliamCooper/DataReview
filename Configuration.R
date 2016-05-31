@@ -959,7 +959,7 @@ if (Project == "PREDICT") {
   ## RPlot2: uses same variables as RPlot1
   VRPlot[[2]] <- VRPlot[[1]]
   ## RPlot3: T vs time, specify any number of temperatures
-  VRPlot$PV3 <- c("ATH1", "ATH2", "ATH3", "ATH4", "AT_A")
+  VRPlot$PV3 <- c("ATH1C", "ATH2C", "ATH3", "ATH4", "AT_A")
   ## RPlot4: compare temperatures in pairs; specify up to five.
   ## first is reference for comparisons
   VRPlot$PV4 <- VRPlot$PV3
@@ -985,7 +985,7 @@ if (Project == "PREDICT") {
   ## plot 8 is total pressure, sum of 1+2 and 3+4; expect agreement
   VRPlot$PV8 <- c("PSF", "QCF", "PS_A", "QC_A")
   ## wind direction, speed, vertical wind: keep these unchanged
-  VRPlot$PV9 <- c("WDC", "IWD", "WSC", "IWS", "WIC", "ADIFR")  # need ADIFR for WIX
+  VRPlot$PV9 <- c("WDC", "IWD", "WSC", "IWS", "WDS", "WSS", "WIC", "ADIFR")  # need ADIFR for WIX
   ## IRU velocity errors from differences (Schuler oscillation); don't change
   VRPlot$PV10 <- c("GGVEW", "VEW", "GGVNS", "VNS", "GGQUAL")
   ## for plotting effect of complementary filter

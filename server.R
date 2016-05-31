@@ -175,6 +175,9 @@ server <- function (input, output, session) {
     if (grepl ('HIPPO', input$Project)) {
       fname <<- sprintf ('%sHIPPO/%s%s%02d.nc', DataDirectory (), input$Project,
                          typeFlight, input$Flight)
+    } else if (grepl ('PREDICT', input$Project)) {
+      fname <<- sprintf ('%sPREDICT/%s%s%02dHW.nc', DataDirectory (), input$Project,
+                         typeFlight, input$Flight)
     } else {
       fname <<- sprintf ('%s%s/%s%s%02d.nc', DataDirectory (), input$Project,
                          input$Project, typeFlight, input$Flight)

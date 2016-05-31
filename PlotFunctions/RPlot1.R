@@ -28,8 +28,8 @@ RPlot1 <- function (data, Flight=NA, Seq=NA) {
   DF$PALTF <- data[, 'PALT']/0.3048
   # data[is.na(data$PSXC), "PSXC"] <- 1013.25
   DF$PA2 <- data$PSXC
-  DF <- DF[!is.na (DF$PA2), ]
-  DF$PA2 <- PressureAltitude (DF$PA2) / 0.3048
+  # DF <- DF[!is.na (DF$PA2), ]
+  DF$PA2[!is.na(DF$PA2)] <- PressureAltitude (DF$PA2[!is.na(DF$PA2)]) / 0.3048
   plotWAC(DF[, c("Time", "GGALTF", "PALTF", "PA2")], ylab="Altitude [ft]")
   #axis(4,at=axTicks(2),labels=round(axTicks(2)*0.3048)) ## this adds a metric axis on right side but at even foot intervals
   axis(4, labels = NA, tck = 0.02,col='white',lwd=0,lwd.ticks=3) # erase the foot ticks plotWAC puts on right axis

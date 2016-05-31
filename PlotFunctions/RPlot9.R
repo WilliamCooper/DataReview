@@ -9,8 +9,10 @@ RPlot9 <- function (data, Seq=NA) {
   tgreen <- rgb(0,200,0,120,maxColorValue=255)
   cs <- c('blue', tgreen, 'red', 'cyan', 'darkorange', 'violet')
   if (is.na (Seq) || (Seq == 1)) {
-    WD <- VRPlot[[9]][grepl ('WD', VRPlot[[9]])]
-    WS <- VRPlot[[9]][grepl ('WS', VRPlot[[9]])]
+    WD <- VRPlot[[9]][grepl ('^WD', VRPlot[[9]])]
+    if ('IWD' %in% VRPlot[[9]]) {WD <- c(WD, 'IWD')}
+    WS <- VRPlot[[9]][grepl ('^WS', VRPlot[[9]])]
+    if ('IWS' %in% VRPlot[[9]]) {WS <- c(WS, 'IWS')}
     WI <- VRPlot[[9]][grepl ('^WI', VRPlot[[9]])]
     plotWAC (data[, c("Time", WD)], 
              col=cs, lwd=line.widths, lty=line.types, ylab=expression (paste ("WDC [",degree,"]")),legend.position=NA,cex.axis=1.5,cex.lab=1.5)

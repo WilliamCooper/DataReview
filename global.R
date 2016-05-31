@@ -317,7 +317,11 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
     ProjectDir <- Project
   }
   
-  fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), ProjectDir, Project, Flight)
+  if (Project != 'PREDICT') {
+    fn <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), ProjectDir, Project, Flight)
+  } else {
+    fn <- sprintf ('%s%s/%srf%02dHW.nc', DataDirectory (), ProjectDir, Project, Flight)
+  }
   if (!file.exists (fn)) {
     if (Trace) {print (sprintf ('%s not found', fn))}
     fn <- sub ('\\.nc', '.Rdata', fn)
