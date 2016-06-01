@@ -85,7 +85,11 @@ server <- function (input, output, session) {
       typeFlight <<- flightType ()
       
       if (grepl ('HIPPO', Project)) {
-        fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), Project)
+        if (grepl ('raf_data', DataDir)) {
+          fn <- sprintf ('%sHIPPO/old_nimbus/%srf01.nc', DataDirectory (), Project)  
+        } else {
+          fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), Project)
+        }
       } else {
         fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), Project, Project)
       }
@@ -94,7 +98,11 @@ server <- function (input, output, session) {
       }
       if (!file.exists (fn)) {
         if (grepl ('HIPPO', Project)) {
-          fn <- sprintf ('%sHIPPO/%stf01.nc', DataDirectory (), Project)
+          if (grepl ('raf_data', DataDir)) {
+            fn <- sprintf ('%sHIPPO/%stf01.nc', DataDirectory (), Project)
+          } else {
+            fn <- sprintf ('%sHIPPO/%stf01.nc', DataDirectory (), Project)
+          }
         } else {
           fn <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
         }
@@ -173,8 +181,13 @@ server <- function (input, output, session) {
     ## these would be needed for translation to new cal coefficients
     ## VarList <- c(VarList, "RTH1", "RTH2", "RTF1")
     if (grepl ('HIPPO', input$Project)) {
-      fname <<- sprintf ('%sHIPPO/%s%s%02d.nc', DataDirectory (), input$Project,
+      if (grepl ('raf_data', DataDir)) {
+        fname <<- sprintf ('%sHIPPO/old_nimbus/%s%s%02d.nc', DataDirectory (), input$Project,
                          typeFlight, input$Flight)
+      } else {
+        fname <<- sprintf ('%sHIPPO/%s%s%02d.nc', DataDirectory (), input$Project,
+                           typeFlight, input$Flight)
+      }
     } else if (grepl ('PREDICT', input$Project)) {
       fname <<- sprintf ('%sPREDICT/%s%s%02dHW.nc', DataDirectory (), input$Project,
                          typeFlight, input$Flight)

@@ -13,7 +13,7 @@ suppressMessages (suppressWarnings (
   library(Ranadu, quietly=TRUE, warn.conflicts=FALSE))
 )
 
-Project <- 'ORCAS'
+Project <- 'PREDICT'
 run.args <- commandArgs (TRUE)
 if (length (run.args) > 0) {
   Flight <- as.numeric (run.args[1])
@@ -397,8 +397,11 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
   slp <<- slp
   return (VRPlot)
 }
-
-fname <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), Project, Project, Flight)
+if (Project != 'PREDICT') {
+  fname <- sprintf ('%s%s/%srf%02d.nc', DataDirectory (), Project, Project, Flight)
+} else {
+  fname <- sprintf ('%s%s/%srf%02dHW.nc', DataDirectory (), Project, Project, Flight)
+}
 # if (!file.exists (fname)) {
 #   fname <- sprintf ('%s%s/%stf01.nc', DataDirectory (), Project, Project)
 # }

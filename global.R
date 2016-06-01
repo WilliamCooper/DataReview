@@ -37,9 +37,14 @@ PJ <- c('ORCAS', 'CSET', 'NOREASTER', 'HCRTEST',
         'DEEPWAVE', 'CONTRAST', 'SPRITE-II', 'MPEX', 'DC3',
         'TORERO', 'HIPPO-5', 'HIPPO-4', 'HIPPO-3', 'HIPPO-2',
         'HIPPO-1','PREDICT', 'START08', 'PACDEX', 'TREX')
+DataDir <- DataDirectory ()
 for (P in PJ) {
   if (grepl('HIPPO', P)) {
-    fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), P)
+    if (grepl ('raf_data', DataDir)) {
+      fn <- sprintf ('%sHIPPO/old_nimbus/%srf01.nc', DataDirectory (), P)  
+    } else {
+      fn <- sprintf ('%sHIPPO/%srf01.nc', DataDirectory (), P)
+    }
   } else {
     fn <- sprintf ('%s%s/%srf01.nc', DataDirectory (), P, P)
     if (!file.exists (fn)) {
@@ -312,7 +317,11 @@ loadVRPlot <- function (Project, Production, Flight, psq) {
     names(VRPlot) <- nm
   }
   if (grepl ('HIPPO', Project)) {
-    ProjectDir <- 'HIPPO'
+    if (grepl ('raf_data', DataDir)) {
+      ProjectDir <- 'HIPPO/old_nimbus'
+    } else {
+      ProjectDir <- 'HIPPO'
+    }
   } else {
     ProjectDir <- Project
   }
