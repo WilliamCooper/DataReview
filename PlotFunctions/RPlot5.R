@@ -34,11 +34,14 @@ RPlot5 <- function (data, Seq=NA) {
     if (length (ir) != 1) {
       ir <- which ('DP_VXL' == DP)
     }
+    ## but don't use it if all-missing
+    if (!(any (!is.na(data[, DP[ir]])))) {ir <- NULL}
     if (length (ir) != 1) {
       ir <- which ('DPV_VXL' == DP) ## used in earlier projects
     }
     if (length (ir) != 1) {
       ir <- 1
+      if (!(any (!is.na(data[, DP[ir]])))) {ir <- 2}
     }
     colr <- c("blue", "darkgreen", "darkorange", "cyan")
     firstPlot <- TRUE
