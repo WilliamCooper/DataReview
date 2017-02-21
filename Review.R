@@ -14,6 +14,7 @@ suppressMessages (suppressWarnings (
 )
 
 Project <- 'PREDICT'
+Project <- 'TORERO'
 run.args <- commandArgs (TRUE)
 if (length (run.args) > 0) {
   Flight <- as.numeric (run.args[1])
@@ -22,7 +23,7 @@ if (length (run.args) > 0) {
 #   Fl <- sort (list.files (sprintf ("%s%s/", DataDirectory (), Project),
 #                           sprintf ("%s_rf...nc", Project)), decreasing = TRUE)[1]
   ## use next plot file instead as default
-  Fl <- sort (list.files (sprintf ("~/RStudio/Reprocessing"),
+  Fl <- sort (list.files (sprintf ("~/RStudio/DataReview"),
                           sprintf ("%srf..Plots.pdf", Project)), decreasing = TRUE)[1]
   if (is.na (Fl)) {
     Flight <- 1
