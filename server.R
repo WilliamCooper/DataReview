@@ -147,6 +147,29 @@ server <- function (input, output, session) {
     times <<- c(minT, maxT)
   }, priority=0)
   
+  observeEvent (input$plot_brush, {
+    xmin <- as.integer(input$plot_brush$xmin)
+    xmax <- as.integer(input$plot_brush$xmax)
+    T1 <- as.POSIXlt(xmin, origin='1970-01-01', tz='UTC')
+    T2 <- as.POSIXlt(xmax, origin='1970-01-01', tz='UTC')
+    TB1 <- T1$hour*10000 + T1$min*100 + T1$sec
+    TB2 <- T2$hour*10000 + T2$min*100 + T2$sec
+#   print (sprintf ('brush times are %d %d', TB1, TB2))
+    updateSliderInput (session, 'times', value=c(T1, T2))
+    times <<- c(T1, T2)
+  } )
+
+    observeEvent (input$resetT, {
+    step <- 60
+    Data <- data ()
+    minT <- Data$Time[1]
+    minT <- minT - as.integer (minT) %% step + step
+    maxT <- Data$Time[nrow(Data)]
+    maxT <- maxT - as.integer (maxT) %% step
+    times <<- c(minT, maxT)
+    updateSliderInput (session, 'times', value=times)
+  } )
+
   
   observe ({                          ## global time
     if (Trace) {print ('entering global-time observer')}

@@ -6,6 +6,13 @@ maxT <- as.POSIXct(3600*8, origin='2012-05-29', tz='UTC')
 step <- 60
 ui <- fluidPage (
   # titlePanel (tags$h1 ('Data Review')),
+   tags$script(HTML("$(function() {
+                                     $(document).keyup(function(e) {
+                                       if (e.which == 115) {
+                                         $('#resetT').click()
+                                       }
+                                     });
+                                   })")),
   navlistPanel (tabPanel ('project, flight, and plot', fluidRow (
     column (3, wellPanel (
       selectInput (inputId='Project', label=NULL,
@@ -38,7 +45,8 @@ ui <- fluidPage (
                   step=step,  
                   timeFormat='%T', dragRange=TRUE,
                   timezone='+0000'))),
-    column (6, wellPanel ( fluidRow (
+    column (1, shinyBS::bsButton ('resetT', label='rst', size='extra-small')),
+    column (5, wellPanel ( fluidRow (
       column (3, numericInput ('minTAS', 'tas min', 110, width='90px')),
       column (3, numericInput ('maxROLL', 'roll', 5, width='90px')),
       column (3, numericInput ('minZ', 'Zmin-km', 2, width='90px')),
@@ -68,7 +76,8 @@ ui <- fluidPage (
                               actionButton ('Xanadu', 'see in Xanadu'),
                               actionButton ('maneuvers', 'see maneuvers'),
                               actionButton ('manual', 'see manual')),
-                 mainPanel( tabsetPanel (tabPanel ('plot', plotOutput (outputId='display')),
+                 mainPanel( tabsetPanel (tabPanel ('plot', plotOutput (outputId='display',
+      					 brush=brushOpts(id='plot_brush', delay=3000, delayType='debounce', resetOnNew=TRUE))),
                                          tabPanel ('stats', dataTableOutput ('stats')),
                                          tabPanel ('histograms', plotOutput (outputId='hist')),
                                          tabPanel ('soundings', plotOutput (outputId='barWvsZ')),
